@@ -3,8 +3,8 @@
 ## 1. Project Goal
 The goal of this project is to design a console-based, menu-driven Java program that can simulate the HoK data management system.
 
-## 2. Requirement Anaylasis
-The project will be able to implement the following features:
+## 2. Requirement Analysis
+The system will implement the following features:
 *   Player Lookup: Search a player by ID or name. Display: 
         player ID and name;
         team;
@@ -29,7 +29,7 @@ The project will be able to implement the following features:
         number of heroes using it;
         win-rate contribution;
         a custom score.
-    P.S. The ranking formula in the documentation will be explained.
+    P.S. The ranking formula will be explained in the documentation.
 *   Match History: Retrieve the last N matches for a player or team. Display:
         opponent;
         date;
@@ -61,7 +61,7 @@ The project will be able to implement the following features:
     P.S. Admin users can create, modify, or delete all data. Player users can only view general data and edit their own basic information.
 
 ## 3. Java Concepts Used
-The following Java comcepts will be used:
+The following Java concepts will be used:
 *   Inheritance: Player and Admin extend Person.
 *   Association: A Player owns multiple Hero objects; a Hero can use multiple Equipment objects.
 *   Aggregation & Composition: A Team contains multiple Player objects.
@@ -96,7 +96,7 @@ The project will include at least the following classes:
 *   15 Heroes (2+ compatible equipment each)
 *   20 Equipment items
 *   10 Match records
-P.S. The dataset may be hard-coded during early development, but later the program should be able to save and load data through files
+P.S. The dataset may be hard-coded during early development, but later the program should be able to save and load data through files.
 
 ## 7. AI Usage Plans
 I will be using 3 AI agents: the Architect Agent, the Implementation Agent and the Testing/Reviewer Agent.
@@ -131,4 +131,4 @@ I will perform manual testing documented in "test-cases.md", ensuring at least 1
 
 ## 12. Final Reflection Placeholder
 This just serves as a reminder for a reflection.
-P.S. After completing the main tasks, I might consider adding some extra features (GUIs, more intersting and helpful classes, amazing new features like  a combat system, etc.)
+P.S. After completing the main tasks, I might consider adding some extra features (GUIs, more interesting and helpful classes, amazing new features like  a combat system, etc.).

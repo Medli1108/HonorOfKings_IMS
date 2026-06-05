@@ -84,18 +84,18 @@ The project will include at least the following classes:
 *   MatchRecord: Represents a match result, participants, hero picks, and date.
 
 ## 5. UML Draft
-*   `Person` <|-- `Player`
-*   `Person` <|-- `Admin`
+*   `Person` <|-- `Player` (Polymorphism)
+*   `Person` <|-- `Admin` (Polymorphism)
 *   `Team` o-- `Player` (Aggregation)
 *   `Player` --> `Hero` (Association)
 *   `Hero` --> `Equipment` (Association)
 
 ## 6. Data Design
-*   3 Teams (5+ players each)
-*   10 Players (3+ heroes each)
-*   15 Heroes (2+ compatible equipment each)
-*   20 Equipment items
-*   10 Match records
+*   3+ Teams (5+ players each)
+*   15+ Players (3+ heroes each)
+*   15+ Heroes (2+ compatible equipment each)
+*   20+ Equipment items
+*   10+ Match records
 P.S. The dataset may be hard-coded during early development, but later the program should be able to save and load data through files.
 
 ## 7. AI Usage Plans

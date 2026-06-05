@@ -1,5 +1,6 @@
 package util;
 
+import model.Admin;
 import model.Equipment;
 import model.Hero;
 import model.Player;
@@ -80,5 +81,11 @@ public class DataInitializer {
                 new MatchRecord(team2, team3, "Draw"),
                 new MatchRecord(team3, team1, "Team Unicorn won"),
                 new MatchRecord(team1, team2, "Team Earth Pony won")));
+
+        // 6. Initialize 4 Admins
+        List<Admin> admins = new ArrayList<>(List.of(
+            new Admin("Twilight Sparkle"), new Admin("Celestia"), 
+            new Admin("Luna"), new Admin("Cadance")
+        ));
     }
 }

@@ -3,11 +3,20 @@ package model;
 import java.util.UUID;
 
 public abstract class Person {
-    private final String id = UUID.randomUUID().toString();
+    private String id;
     private String name;
-    private boolean role; // true for admin, false for normal player.
+    private Role role; 
 
-    protected Person(String name, boolean role) {
+    // Constructor for new instances
+    protected Person(String name, Role role) {
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
+        this.role = role;
+    }
+
+    // Constructor for loading existing instances from storage
+    protected Person(String id, String name, Role role) {
+        this.id = id;
         this.name = name;
         this.role = role;
     }
@@ -19,7 +28,8 @@ public abstract class Person {
     public String getId() {
         return this.id;
     }
-    public boolean getRole() {
+    
+    public Role getRole() {
         return this.role;
     }
 

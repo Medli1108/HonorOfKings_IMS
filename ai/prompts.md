@@ -88,3 +88,64 @@ The code is strictly the data initialization block as requested! Let me know if 
 
 ### My Decision
 I accepted the broad framework, but made a few manual tweaks to the dataset. I also found one AI's misunderstanding of the requirements regarding association.
+
+## Prompt 05
+Time: 2026-06-05 09:54
+Tool/Model: Gemini Pro
+Agent Role: Testing/Reviewer Agent
+Related Commit: [Insert Commit Hash]
+
+### My Prompt
+Act as an Testing/Reviewer Agent, within the four files as shown as context, accrding to the plan, have I met the requirements and are there any bugs?
+
+### AI Response Summary
+As a Testing/Reviewer Agent, I have reviewed your `Player.java`, `Person.java`, `Admin.java`, and `plan.md` files. 
+
+You have built a solid foundation that correctly implements several core Object-Oriented principles outlined in your grand plan (Inheritance, Polymorphism, and Encapsulation). However, looking ahead to the rest of your requirements—especially Data Management and File I/O—there are a few logical bugs, missing elements, and code smells that will cause problems if not addressed now.
+
+Here is my review report:
+
+### ✅ What You Have Met Successfully
+1. **Inheritance & Polymorphism:** `Person` is correctly marked as `abstract`, and both `Player` and `Admin` extend it. This perfectly matches the UML draft in `plan.md`.
+2. **Encapsulation:** You have correctly made the class fields `private` and provided `public` getters to control access.
+3. **Association:** `Player` properly holds a `List<Hero>` using an `ArrayList`, fulfilling the "Player -> Hero" relationship requirement.
+
+---
+
+### 🐛 Bugs & Logical Issues
+
+**1. The `final` UUID will break File Loading (Data Persistence)**
+* **The Issue:** In `Person.java`, you have `private final String id = UUID.randomUUID().toString();`. 
+* **Why it's a bug:** Your `plan.md` requires **File I/O** to save and load data. When you load a previously saved player from a CSV/JSON file, you need to preserve their original ID. Because `id` is `final` and auto-generated on instantiation, you will assign a brand new ID every time you load the player from the file, breaking all relationships (like Match Records and Teams).
+* **Fix:** Remove `final` and create an overloaded constructor in `Person.java` (and subclasses) that accepts an existing `id` string for loading data, while keeping the auto-generation for brand new creations.
+
+**2. Missing Setters / Update Methods in `Player.java`**
+* **The Issue:** Your `Player` class initializes `winRate` to `0.0` and `level` to `0`, but there is no way to change them. Furthermore, you have a `Team ownTeam;` variable but no way to assign a team to the player.
+* **Why it's a bug:** Your `plan.md` states "Admin users can add, delete, and edit players" and that player stats will be tracked. Without setter methods (e.g., `setLevel(int level)`, `setTeam(Team team)`), data management is impossible.
+* **Fix:** Add standard setter methods or business logic methods (like `updateWinRate()`, `setOwnTeam()`) in `Player.java`.
+
+**3. Boolean Role vs. Enum Requirement**
+* **The Issue:** In `Person.java`, you use `private boolean role; // true for admin, false for normal player`.
+* **Why it's a bug:** While functional, your `plan.md` (Section 3: Java Concepts Used) explicitly states: *"Enums: Use enums such as ... Role"*. Using a boolean restricts you to only two roles and violates your own design plan.
+* **Fix:** Create a `Role` enum (e.g., `public enum Role { ADMIN, PLAYER }`) and use that instead of the boolean.
+
+---
+
+### 🧹 Code Smells & Clean Code Suggestions
+There are a few naming convention violations in `Player.java`. In Java, camelCase is standard for methods:
+* `getownedHeroes()` should be renamed to **`getOwnedHeroes()`**.
+* `getlevel()` should be renamed to **`getLevel()`**.
+* `getownedTeam()` should be renamed to **`getOwnTeam()`** (matching the variable name `ownTeam`).
+
+### 📝 Next Steps for the Implementation Agent
+If you permit the Implementation Agent to fix these, it should:
+1. Introduce a `Role` Enum and update `Person.java`, `Player.java`, and `Admin.java`.
+2. Refactor `Person.java` to support an overloaded constructor for loading existing IDs.
+3. Add mutator methods (setters) in `Player.java` for `level`, `winRate`, and `ownTeam`.
+4. Fix the camelCase typos in `Player.java`.
+
+Would you like me to hand this over to the Implementation Agent to apply these fixes?
+
+### My Decision
+After careful consideration, I accepted the proposed code review modifications. I refactored the codebase to leverage a structured `Role` enum instead of a primitive boolean value to safely distinguish between admin users and regular players, resolved the final constraint on file loading IDs (though that file I/O is kinda a stretch goal), and corrected the camelCase naming bugs.
+

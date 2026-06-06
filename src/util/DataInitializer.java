@@ -60,8 +60,8 @@ public class DataInitializer {
         for (Hero hero : heroes) {
             Collections.shuffle(equipments);
 
-            hero.addEquipment(equipments.get(0));
-            hero.addEquipment(equipments.get(1));
+            hero.addCompatibleEquipment(equipments.get(0));
+            hero.addCompatibleEquipment(equipments.get(1));
         }
         // 4. Initialize 3 Teams with 5 players each
         Team team1 = new Team("Team Earth Pony", players.subList(0, 5));

@@ -14,16 +14,70 @@ public class Hero {
     private int baseAttack;
     
     // Associations
-    private List<Equipment> compatibleEquipment;
-    private List<Equipment> recommendedEquipment;
+    private List<Equipment> compatibleEquipments;
+    private List<Equipment> recommendedEquipments;
 
     // Minimal constructor to satisfy DataInitializer
     public Hero(String name) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
-        this.compatibleEquipment = new ArrayList<>();
-        this.recommendedEquipment = new ArrayList<>();
+        this.compatibleEquipments = new ArrayList<>();
+        this.recommendedEquipments = new ArrayList<>();
     }
 
-    // TODO: Implementation Agent to add getters, setters, File I/O constructors, and stat logic
+    // Getters and setters
+    public String getId() {
+        return this.id;
+    }
+    public String getName() {
+        return this.name;
+    }
+    public HeroType getType() {
+        return this.type;
+    }
+    public int getBaseHp() {
+        return this.baseHp;
+    }
+    public int getBaseAttack() {
+        return this.baseAttack;
+    }
+    public List<Equipment> getCompatiableEquipments() {
+        return compatibleEquipments;
+    }
+    public List<Equipment> getRecommendedEquipments() {
+        return recommendedEquipments;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setType(HeroType type) {
+        this.type = type;
+    }
+    public void setBaseHp(int baseHp) {
+        this.baseHp = baseHp;
+    }
+    public void setBaseAttack(int baseAttack) {
+        this.baseAttack = baseAttack;
+    }
+
+    // Methods
+    public void addCompatibleEquipment(Equipment equipment) {
+        this.compatibleEquipments.add(equipment);
+    }
+    public void addRecommendedEquipment(Equipment equipment) {
+        this.recommendedEquipments.add(equipment);
+    }
+
+    // File I/O constructor
+    public Hero(String id, String name, HeroType type, int baseHp, int baseAttack, ArrayList<Equipment> compatibleEquipments, ArrayList<Equipment> recommendedEquipments) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.baseHp = baseHp;
+        this.baseAttack = baseAttack;
+        this.compatibleEquipments = compatibleEquipments;
+        this.recommendedEquipments = recommendedEquipments;
+    }
+
+
 }

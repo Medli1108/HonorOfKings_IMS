@@ -229,3 +229,21 @@ The AI agreed with the structural decision to centralize data lifecycle manageme
 
 ### My Decision
 Rejected this draft. The proposed framework bundles too many responsibilities together; the search functionality needs to be decoupled into a separate service, and the overall boilerplate framework requires further fine-tuning.
+
+## Prompt 09
+Time: 2026-06-06 02:50
+Tool/Model: Gemini Pro
+Agent Role: Implementation Agent
+Related Commit: 76946e6
+
+### My Prompt
+Well, the search service should be separated as well. Now act as an Implementation agent, use the singleton pattern to design the gamedatamanagement file and design the searchservice as well.
+
+### AI Response Summary
+The AI refactored the architecture by splitting data management and search logic into separate components:
+1. **`GameDataManager.java`**: Implemented as a Singleton with a private constructor, a static `getInstance()` method, and encapsulated lists for all game models.
+2. **`SearchService.java`**: Created as a standalone service decoupled from data storage. It is initialized with the `GameDataManager` instance and contains targeted lookup methods for players, teams, heroes, and match histories.
+3. **`DataInitializer.java`**: Updated to utilize the new `GameDataManager` singleton instance for data population and corrected the underlying data types (fixing the previous `String` vs `MatchResult` enum mismatch).
+
+### My Decision
+Accepted the changes. The separation of concerns between data storage and search services is much cleaner. The infrastructure is ready for further fine-tuning.

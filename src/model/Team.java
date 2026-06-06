@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 import java.util.UUID;
 
-public class Team {
+public class Team implements Searchable {
     private String id;
     private String name;
 
@@ -30,6 +30,7 @@ public class Team {
 
     // Architectural skeleton for future calculation methods
     public double calculateAverageLevel() {
+        if (members == null || members.isEmpty()) return 0.0;
         double averageLevel = 0.0;
         for (Player player : members) {
             averageLevel += player.getLevel();
@@ -38,11 +39,12 @@ public class Team {
     }
 
     public double calculateWinRate() {
-        double winRate = 0.0;
-        return winRate / totalMatches;
+        if (totalMatches == 0) return 0.0;
+        return (double) wins / totalMatches;
     }
 
     public Player getTopPlayer() {
+        if (members == null || members.isEmpty()) return null;
         Player topPlayer = members.get(0);
         for (Player player : members) {
             if (player.getLevel() > topPlayer.getLevel()) {

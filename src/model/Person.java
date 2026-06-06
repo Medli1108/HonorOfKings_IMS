@@ -2,7 +2,7 @@ package model;
 
 import java.util.UUID;
 
-public abstract class Person {
+public abstract class Person implements Searchable {
     private String id;
     private String name;
     private Role role; 

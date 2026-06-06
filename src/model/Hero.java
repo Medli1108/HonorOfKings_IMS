@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Hero {
+public class Hero implements Searchable {
     private String id;
     private String name;
     private HeroType type;
@@ -41,7 +41,7 @@ public class Hero {
     public int getBaseAttack() {
         return this.baseAttack;
     }
-    public List<Equipment> getCompatiableEquipments() {
+    public List<Equipment> getCompatibleEquipments() {
         return compatibleEquipments;
     }
     public List<Equipment> getRecommendedEquipments() {

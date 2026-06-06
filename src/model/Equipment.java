@@ -2,7 +2,7 @@ package model;
 
 import java.util.UUID;
 
-public class Equipment {
+public class Equipment implements Searchable {
     private String id;
     private String name;
     
@@ -69,3 +69,4 @@ public class Equipment {
         this.averageRating = averageRating;
     }
 }
+

@@ -8,8 +8,7 @@ public class MatchRecord {
     private Team teamA;
     private Team teamB;
     
-    // Could eventually be an enum (MatchResult), but keeping String for DataInitializer compat
-    private String result; 
+    private MatchResult result;
     
     private LocalDateTime matchDate;
     
@@ -17,7 +16,7 @@ public class MatchRecord {
     // private Map<Player, Hero> picks;
 
     // Minimal constructor to satisfy DataInitializer
-    public MatchRecord(Team teamA, Team teamB, String result) {
+    public MatchRecord(Team teamA, Team teamB, MatchResult result) {
         this.id = UUID.randomUUID().toString();
         this.teamA = teamA;
         this.teamB = teamB;
@@ -26,7 +25,7 @@ public class MatchRecord {
     }
     
     // File I/O constructor
-    public MatchRecord(String id, Team teamA, Team teamB, String result, LocalDateTime matchDate) {
+    public MatchRecord(String id, Team teamA, Team teamB, MatchResult result, LocalDateTime matchDate) {
         this.id = id;
         this.teamA = teamA;
         this.teamB = teamB;
@@ -58,11 +57,11 @@ public class MatchRecord {
         this.teamB = teamB;
     }
 
-    public String getResult() {
+    public MatchResult getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(MatchResult result) {
         this.result = result;
     }
 

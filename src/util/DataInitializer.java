@@ -6,6 +6,8 @@ import model.Hero;
 import model.Player;
 import model.Team;
 import model.MatchRecord;
+import model.MatchResult;
+import service.GameDataManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,6 +16,8 @@ import java.util.List;
 public class DataInitializer {
 
     public static void initialize() {
+        GameDataManager dataManager = GameDataManager.getInstance();
+
         // 1. Initialize 20 Equipment Items
         List<Equipment> equipments = new ArrayList<>(List.of(
                 new Equipment("The Master Sword"), new Equipment("Hookshot"),
@@ -71,21 +75,29 @@ public class DataInitializer {
 
         // 5. Initialize 10 Match Records
         List<MatchRecord> matchRecords = new ArrayList<>(List.of(
-                new MatchRecord(team1, team2, "Team Earth Pony won"),
-                new MatchRecord(team2, team3, "Team Pegasus won"),
-                new MatchRecord(team3, team1, "Team Unicorn won"),
-                new MatchRecord(team1, team2, "Draw"),
-                new MatchRecord(team1, team3, "Team Earth Pony won"),
-                new MatchRecord(team2, team1, "Team Pegasus won"),
-                new MatchRecord(team3, team2, "Team Unicorn won"),
-                new MatchRecord(team2, team3, "Draw"),
-                new MatchRecord(team3, team1, "Team Unicorn won"),
-                new MatchRecord(team1, team2, "Team Earth Pony won")));
+                new MatchRecord(team1, team2, MatchResult.TEAM_A_WIN),
+                new MatchRecord(team2, team3, MatchResult.TEAM_A_WIN),
+                new MatchRecord(team3, team1, MatchResult.TEAM_A_WIN),
+                new MatchRecord(team1, team2, MatchResult.DRAW),
+                new MatchRecord(team1, team3, MatchResult.TEAM_A_WIN),
+                new MatchRecord(team2, team1, MatchResult.TEAM_A_WIN),
+                new MatchRecord(team3, team2, MatchResult.TEAM_A_WIN),
+                new MatchRecord(team2, team3, MatchResult.DRAW),
+                new MatchRecord(team3, team1, MatchResult.TEAM_A_WIN),
+                new MatchRecord(team1, team2, MatchResult.TEAM_A_WIN)));
 
         // 6. Initialize 4 Admins
         List<Admin> admins = new ArrayList<>(List.of(
             new Admin("Twilight Sparkle"), new Admin("Celestia"), 
             new Admin("Luna"), new Admin("Cadance")
         ));
+        
+        // Populate the GameDataManager
+        dataManager.setEquipmentList(equipments);
+        dataManager.setHeroes(heroes);
+        dataManager.setPlayers(players);
+        dataManager.setTeams(teams);
+        dataManager.setMatchRecords(matchRecords);
+        dataManager.setAdmins(admins);
     }
 }

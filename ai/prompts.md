@@ -247,3 +247,18 @@ The AI refactored the architecture by splitting data management and search logic
 
 ### My Decision
 Accepted the changes. The separation of concerns between data storage and search services is much cleaner. The infrastructure is ready for further fine-tuning.
+
+## Prompt 10
+Time: 2026-06-07 14:26
+Tool/Model: Gemini Pro
+Agent Role: Implementation Agent
+Related Commit: 3039ce0
+
+### My Prompt
+Act as an Implementation agent, within the relative files, I will use .csv as file I/O as stated in the plan.md, please help me achieve this feature.
+
+### AI Response Summary
+The AI implemented a comprehensive CSV-based File I/O solution for data persistence. It generated the necessary reader and writer helper utilities, integrated them into the `GameDataManager` lifecycle to handle automated loading and saving of game lists (players, teams, heroes, etc.), and implemented standard Java exception handling (`IOException`) to ensure data safety during file operations.
+
+### My Decision
+Accepted the implementation. Because Java File I/O is a completely new topic for me, I am trusting the AI's generated architecture for the time being. I will proceed by reviewing the code line-by-line to study how the underlying streams and parsing work, followed by rigorous manual testing to verify that data is correctly preserved across sessions.

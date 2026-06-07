@@ -44,15 +44,13 @@ public class GameDataManager {
     }
 
     public void loadDataFromFile() {
-        // TODO: Implement File I/O loading (CSV/JSON)
-        // This will be implemented in a future milestone when data formats are finalized.
-        System.out.println("loadDataFromFile is not yet implemented.");
+        FileStorageService storageService = new FileStorageService();
+        storageService.loadData(this);
     }
 
     public void saveDataToFile() {
-        // TODO: Implement File I/O saving (CSV/JSON)
-        // This will be implemented in a future milestone when data formats are finalized.
-        System.out.println("saveDataToFile is not yet implemented.");
+        FileStorageService storageService = new FileStorageService();
+        storageService.saveData(this);
     }
 
     // --- 2. Statistics & Leaderboards ---

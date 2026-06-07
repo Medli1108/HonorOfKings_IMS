@@ -59,7 +59,7 @@ public class GameDataManager {
 
     public List<Equipment> getRankedEquipment() {
         List<Equipment> rankedList = new ArrayList<>(equipmentList);
-        // Sort by usage count descending, then by win rate contribution descending
+        // Sort by win rate descending, then by usage count descending
         rankedList.sort((e1, e2) -> {
             int usageCompare = Double.compare(e2.getWinRateContribution(), e1.getWinRateContribution());
             if (usageCompare != 0) return usageCompare;

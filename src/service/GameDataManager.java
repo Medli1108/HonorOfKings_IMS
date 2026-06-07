@@ -40,50 +40,68 @@ public class GameDataManager {
     // --- 1. Initialization & Persistence ---
     
     public void initializeDummyData() {
-        // TODO: Adapt DataInitializer to populate these lists
         DataInitializer.initialize(); 
     }
 
     public void loadDataFromFile() {
         // TODO: Implement File I/O loading (CSV/JSON)
+        // This will be implemented in a future milestone when data formats are finalized.
+        System.out.println("loadDataFromFile is not yet implemented.");
     }
 
     public void saveDataToFile() {
         // TODO: Implement File I/O saving (CSV/JSON)
+        // This will be implemented in a future milestone when data formats are finalized.
+        System.out.println("saveDataToFile is not yet implemented.");
     }
 
     // --- 2. Statistics & Leaderboards ---
 
     public List<Equipment> getRankedEquipment() {
-        // TODO: Implement sorting logic based on usage/win-rate/custom score
-        return new ArrayList<>();
+        List<Equipment> rankedList = new ArrayList<>(equipmentList);
+        // Sort by usage count descending, then by win rate contribution descending
+        rankedList.sort((e1, e2) -> {
+            int usageCompare = Double.compare(e2.getWinRateContribution(), e1.getWinRateContribution());
+            if (usageCompare != 0) return usageCompare;
+            return Integer.compare(e2.getUsageCount(), e1.getUsageCount());
+        });
+        return rankedList;
     }
 
     public List<Player> getPlayerLeaderboard(int topX) {
-        // TODO: Implement sorting logic for top players (win rate/level)
-        return new ArrayList<>();
+        List<Player> rankedPlayers = new ArrayList<>(players);
+        // Sort by win rate descending, then level descending
+        rankedPlayers.sort((p1, p2) -> {
+            int winRateCompare = Double.compare(p2.getWinRate(), p1.getWinRate());
+            if (winRateCompare != 0) return winRateCompare;
+            return Integer.compare(p2.getLevel(), p1.getLevel());
+        });
+        
+        if (topX >= rankedPlayers.size()) {
+            return rankedPlayers;
+        }
+        return rankedPlayers.subList(0, topX);
     }
 
     // --- 3. CRUD Operations (Admin Data Management) ---
 
     public void addPlayer(Player player) {
-        players.add(player);
+        if (player != null) {
+            players.add(player);
+        }
     }
 
     public boolean removePlayer(String playerId) {
-        // TODO: Implement removal logic
-        return false;
+        return players.removeIf(p -> p.getId().equals(playerId));
     }
 
     public void updatePlayer(Player updatedPlayer) {
-        // TODO: Implement update logic
-    }
-
-    // --- 4. Authentication ---
-
-    public Person authenticateUser(String nameOrId) {
-        // TODO: Check against Admins, then Players. Return the authenticated Person.
-        return null;
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getId().equals(updatedPlayer.getId())) {
+                players.set(i, updatedPlayer);
+                return;
+            }
+        }
     }
 
     // --- Getters and Setters for Data Access ---

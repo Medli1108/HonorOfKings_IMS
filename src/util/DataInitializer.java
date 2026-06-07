@@ -9,14 +9,12 @@ import model.MatchRecord;
 import model.MatchResult;
 import service.GameDataManager;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class DataInitializer {
 
     public static void initialize() {
-        GameDataManager dataManager = GameDataManager.getInstance();
 
         // 1. Initialize 20 Equipment Items
         List<Equipment> equipments = new ArrayList<>(List.of(
@@ -92,6 +90,8 @@ public class DataInitializer {
             new Admin("Luna"), new Admin("Cadance")
         ));
         
+        GameDataManager dataManager = GameDataManager.getInstance();
+
         // Populate the GameDataManager
         dataManager.setEquipmentList(equipments);
         dataManager.setHeroes(heroes);

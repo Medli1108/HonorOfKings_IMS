@@ -37,7 +37,7 @@ public class GameDataManager {
         return instance;
     }
 
-    // --- 1. Initialization & Persistence ---
+    // Initialization & Persistence 
     
     public void initializeDummyData() {
         DataInitializer.initialize(); 
@@ -53,35 +53,8 @@ public class GameDataManager {
         storageService.saveData(this);
     }
 
-    // --- 2. Statistics & Leaderboards ---
 
-    public List<Equipment> getRankedEquipment() {
-        List<Equipment> rankedList = new ArrayList<>(equipmentList);
-        // Sort by win rate descending, then by usage count descending
-        rankedList.sort((e1, e2) -> {
-            int usageCompare = Double.compare(e2.getWinRateContribution(), e1.getWinRateContribution());
-            if (usageCompare != 0) return usageCompare;
-            return Integer.compare(e2.getUsageCount(), e1.getUsageCount());
-        });
-        return rankedList;
-    }
-
-    public List<Player> getPlayerLeaderboard(int topX) {
-        List<Player> rankedPlayers = new ArrayList<>(players);
-        // Sort by win rate descending, then level descending
-        rankedPlayers.sort((p1, p2) -> {
-            int winRateCompare = Double.compare(p2.getWinRate(), p1.getWinRate());
-            if (winRateCompare != 0) return winRateCompare;
-            return Integer.compare(p2.getLevel(), p1.getLevel());
-        });
-        
-        if (topX >= rankedPlayers.size()) {
-            return rankedPlayers;
-        }
-        return rankedPlayers.subList(0, topX);
-    }
-
-    // --- 3. CRUD Operations (Admin Data Management) ---
+    // CRUD Operations (Admin Data Management)
 
     public void addPlayer(Player player) {
         if (player != null) {
@@ -102,7 +75,7 @@ public class GameDataManager {
         }
     }
 
-    // --- Getters and Setters for Data Access ---
+    // Getters and Setters for Data Access
     
     public List<Player> getPlayers() { return players; }
     public void setPlayers(List<Player> players) { this.players = players; }

@@ -433,7 +433,7 @@ The AI verified the structural alignment by compiling the project, confirming ze
 Accepted these necessary modifications. Synchronizing the utility scripts and file storage mechanisms ensures the data persistence layer remains functional and seamlessly incorporates our recent model refactoring updates.
 
 ## Prompt 19
-Time: 2026-06-09 01:47
+Time: 2026-06-09 02:54
 Tool/Model: Gemini Pro
 Agent Role: AI Reviewer and Implementation Agent
 Related Commit: 1b40bbc
@@ -448,3 +448,23 @@ The AI confirmed that the backend's core coursework requirements, thread-safety 
 
 ### My Decision
 Accepted and applied the changes. Mutating the fields on the existing object references ensures that all multi-layered relationships—like teams and match histories—remain perfectly synchronized during live execution.
+
+## Prompt 20
+Time: 2026-06-09 03:22
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer and Implementation Agent
+Related Commit: b7067fb
+
+### My Prompt
+Act as an AI reviewer and implementation agent. I am planning to move on to the next phase: the frontend. Please check if my backend meets all the requirements and is sufficiently robust.
+
+### AI Response Summary
+The AI verified that the backend foundation remains structurally solid but exposed three remaining vulnerabilities to patch before starting the UI development:
+1. **Critical Business-Logic Bug (`updateMatchRecord` Desync)**: Pointed out that editing a match result from an admin dashboard would permanently corrupt team and player records. It suggested executing a safe mathematical rollback by running `removeMatchRecord()` on the old metrics before calculating fresh scores through `addMatchRecord()`.
+2. **Thread-Safety Gap (Unsafe Aggregation Iteration)**: Identified a concurrency leak inside `addMatchRecord()`. While global master lists are synchronized, iterating directly over internal player roster lists (e.g., `teamA.getMembers()`) risks throwing a `ConcurrentModificationException` if a separate thread mutates a roster mid-loop. This requires localized `synchronized` guard blocks.
+3. **Code Smell (Dangerous Floating-Point Equality)**: Tagged the direct use of the primitive `==` operator on `double` values within `Team.getTopPlayer()` as a hazard due to native binary precision loss, recommending a drop-in fix using `Double.compare() == 0`.
+
+The AI concluded that once patched, the decoupled service architecture is fully ready for a standard console menu implementation, leaving the backend structurally poised for a future graphical interface upgrade (like JavaFX or Swing).
+
+### My Decision
+Accepted these changes. I will implement the mathematical metric rollback, apply localized thread guards to the roster collections, and refactor the double comparison logic to ensure perfect data integrity as I bridge the backend to the user interface.

@@ -69,7 +69,7 @@ public class Hero implements Searchable {
     }
 
     // File I/O constructor
-    public Hero(String id, String name, HeroType type, int baseHp, int baseAttack, ArrayList<Equipment> compatibleEquipments, ArrayList<Equipment> recommendedEquipments) {
+    public Hero(String id, String name, HeroType type, int baseHp, int baseAttack, List<Equipment> compatibleEquipments, ArrayList<Equipment> recommendedEquipments) {
         this.id = id;
         this.name = name;
         this.type = type;

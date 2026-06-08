@@ -79,7 +79,7 @@ private GameDataManager() {
         }
     }
 
-    public void addMatchRecord(MatchRecord record) {
+    public synchronized void addMatchRecord(MatchRecord record) {
         if (record != null) {
             matchRecords.add(record);
 
@@ -272,7 +272,7 @@ private GameDataManager() {
         return removed;
     }
 
-    public boolean removeMatchRecord(String recordId) {
+    public synchronized boolean removeMatchRecord(String recordId) {
         MatchRecord targetRecord = null;
         
         synchronized (matchRecords) {
@@ -422,7 +422,7 @@ private GameDataManager() {
         }
     }
 
-    public void updateMatchRecord(MatchRecord updatedRecord) {
+    public synchronized void updateMatchRecord(MatchRecord updatedRecord) {
         synchronized (matchRecords) {
             MatchRecord existingRecord = null;
             for (MatchRecord m : matchRecords) {

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameDataManager {
-    
+
     // --- Singleton Instance ---
     private static GameDataManager instance;
 
@@ -20,13 +20,13 @@ public class GameDataManager {
     private List<MatchRecord> matchRecords;
 
     // Private constructor to prevent instantiation
-    private GameDataManager() {
-        this.players = new ArrayList<>();
-        this.admins = new ArrayList<>();
-        this.heroes = new ArrayList<>();
-        this.equipmentList = new ArrayList<>();
-        this.teams = new ArrayList<>();
-        this.matchRecords = new ArrayList<>();
+private GameDataManager() {
+        this.players = java.util.Collections.synchronizedList(new ArrayList<>());
+        this.admins = java.util.Collections.synchronizedList(new ArrayList<>());
+        this.heroes = java.util.Collections.synchronizedList(new ArrayList<>());
+        this.equipmentList = java.util.Collections.synchronizedList(new ArrayList<>());
+        this.teams = java.util.Collections.synchronizedList(new ArrayList<>());
+        this.matchRecords = java.util.Collections.synchronizedList(new ArrayList<>());
     }
 
     // Public method to get the singleton instance
@@ -37,10 +37,10 @@ public class GameDataManager {
         return instance;
     }
 
-    // Initialization & Persistence 
-    
+    // Initialization & Persistence
+
     public void initializeDummyData() {
-        DataInitializer.initialize(); 
+        DataInitializer.initialize();
     }
 
     public void loadDataFromFile() {
@@ -52,7 +52,6 @@ public class GameDataManager {
         FileStorageService storageService = new FileStorageService();
         storageService.saveData(this);
     }
-
 
     // CRUD Operations (Admin Data Management)
 
@@ -80,21 +79,24 @@ public class GameDataManager {
         }
     }
 
-public boolean removePlayer(String playerId) {
-    boolean removed = players.removeIf(p -> p.getId().equals(playerId));
-    if (removed) {
-        for (Team team : teams) {
-            team.getMembers().removeIf(p -> p.getId().equals(playerId));
+    public boolean removePlayer(String playerId) {
+        boolean removed = players.removeIf(p -> p.getId().equals(playerId));
+        if (removed) {
+            for (Team team : teams) {
+                team.getMembers().removeIf(p -> p.getId().equals(playerId));
+            }
         }
+        return removed;
     }
-    return removed;
-}
 
     public boolean removeHero(String heroId) {
         boolean removed = heroes.removeIf(h -> h.getId().equals(heroId));
         if (removed) {
             for (Player player : players) {
                 player.getOwnedHeroes().removeIf(h -> h.getId().equals(heroId));
+            }
+            for (MatchRecord record : matchRecords) {
+                record.getPlayerHeroPicks().values().removeIf(id -> id.equals(heroId));
             }
         }
         return removed;
@@ -111,17 +113,17 @@ public boolean removePlayer(String playerId) {
         return removed;
     }
 
-public boolean removeTeam(String teamId) {
-    boolean removed = teams.removeIf(t -> t.getId().equals(teamId));
-    if (removed) {
-        for (Player player : players) {
-            if (player.getOwnTeam() != null && player.getOwnTeam().getId().equals(teamId)) {
-                player.setOwnTeam(null);
+    public boolean removeTeam(String teamId) {
+        boolean removed = teams.removeIf(t -> t.getId().equals(teamId));
+        if (removed) {
+            for (Player player : players) {
+                if (player.getOwnTeam() != null && player.getOwnTeam().getId().equals(teamId)) {
+                    player.setOwnTeam(null);
+                }
             }
         }
+        return removed;
     }
-    return removed;
-}
 
     public void updatePlayer(Player updatedPlayer) {
         for (int i = 0; i < players.size(); i++) {
@@ -133,22 +135,52 @@ public boolean removeTeam(String teamId) {
     }
 
     // Getters and Setters for Data Access
-    
-    public List<Player> getPlayers() { return java.util.Collections.unmodifiableList(players); }
-    public void setPlayers(List<Player> players) { this.players = players; }
-    
-    public List<Admin> getAdmins() { return java.util.Collections.unmodifiableList(admins); }
-    public void setAdmins(List<Admin> admins) { this.admins = admins; }
-    
-    public List<Hero> getHeroes() { return java.util.Collections.unmodifiableList(heroes); }
-    public void setHeroes(List<Hero> heroes) { this.heroes = heroes; }
-    
-    public List<Equipment> getEquipmentList() { return java.util.Collections.unmodifiableList(equipmentList); }
-    public void setEquipmentList(List<Equipment> equipmentList) { this.equipmentList = equipmentList; }
-    
-    public List<Team> getTeams() { return java.util.Collections.unmodifiableList(teams); }
-    public void setTeams(List<Team> teams) { this.teams = teams; }
-    
-    public List<MatchRecord> getMatchRecords() { return java.util.Collections.unmodifiableList(matchRecords); }
-    public void setMatchRecords(List<MatchRecord> matchRecords) { this.matchRecords = matchRecords; }
+
+    public List<Player> getPlayers() {
+        return java.util.Collections.unmodifiableList(players);
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public List<Admin> getAdmins() {
+        return java.util.Collections.unmodifiableList(admins);
+    }
+
+    public void setAdmins(List<Admin> admins) {
+        this.admins = admins;
+    }
+
+    public List<Hero> getHeroes() {
+        return java.util.Collections.unmodifiableList(heroes);
+    }
+
+    public void setHeroes(List<Hero> heroes) {
+        this.heroes = heroes;
+    }
+
+    public List<Equipment> getEquipmentList() {
+        return java.util.Collections.unmodifiableList(equipmentList);
+    }
+
+    public void setEquipmentList(List<Equipment> equipmentList) {
+        this.equipmentList = equipmentList;
+    }
+
+    public List<Team> getTeams() {
+        return java.util.Collections.unmodifiableList(teams);
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
+    public List<MatchRecord> getMatchRecords() {
+        return java.util.Collections.unmodifiableList(matchRecords);
+    }
+
+    public void setMatchRecords(List<MatchRecord> matchRecords) {
+        this.matchRecords = matchRecords;
+    }
 }

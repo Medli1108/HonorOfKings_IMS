@@ -16,7 +16,7 @@ public class FileStorageService {
     private static final String EQUIPMENTS_FILE = DATA_DIR + "equipments.csv";
     private static final String TEAMS_FILE = DATA_DIR + "teams.csv";
     private static final String MATCH_RECORDS_FILE = DATA_DIR + "match_records.csv";
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     // Write utilities
     private static void writeLines(String filePath, List<String> lines) {

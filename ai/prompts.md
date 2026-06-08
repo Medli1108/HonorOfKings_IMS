@@ -319,3 +319,22 @@ The AI reiterated previous high-level architectural warnings and provided an act
 
 ### My Decision
 Accepted the suggestions. I will integrate these five code adjustments into the codebase to stabilize the backend architecture before proceeding.
+
+## Prompt 14
+Time: 2026-06-08 19:10
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer and Implementation Agent
+Related Commit: 25f2911
+
+### My Prompt
+Act as an AI reviewer and implemetaiton agent, is there anything wrong with my code? If so please tell me why and change it
+
+### AI Response Summary
+The AI identified and resolved several critical runtime data integrity and synchronization issues across the backend:
+* **Thread-Safety Violation (`GameDataManager.java`)**: Fixed unsafe direct iteration over synchronized lists within `removePlayer()`, `removeHero()`, `removeEquipment()`, `removeTeam()`, and `updatePlayer()` by wrapping the iterators inside explicit `synchronized (listName)` blocks.
+* **Memory Leak / Incomplete Player Cleanup**: Enhanced `removePlayer()` to clear out a player's stranded hero choices from `playerHeroPicks` across all records in `matchRecords`.
+* **Data Inconsistency (Dangling Team References)**: Updated `removeTeam()` to completely purge any historical `MatchRecord` tied to a deleted `teamId` (preventing orphan match references).
+* **Null Object Danger (`DataInitializer.java`)**: Fixed a bug where mock heroes were initialized with a `null` value for their `HeroType` by introducing logic to randomly assign a valid `HeroType` during data initialization.
+
+### My Decision
+Accepted the changes to increase system robustness and prevent concurrent modification exceptions during runtime execution.

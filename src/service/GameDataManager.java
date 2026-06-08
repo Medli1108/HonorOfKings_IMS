@@ -98,21 +98,21 @@ public class GameDataManager {
 
     // Getters and Setters for Data Access
     
-    public List<Player> getPlayers() { return players; }
+    public List<Player> getPlayers() { return java.util.Collections.unmodifiableList(players); }
     public void setPlayers(List<Player> players) { this.players = players; }
     
-    public List<Admin> getAdmins() { return admins; }
+    public List<Admin> getAdmins() { return java.util.Collections.unmodifiableList(admins); }
     public void setAdmins(List<Admin> admins) { this.admins = admins; }
     
-    public List<Hero> getHeroes() { return heroes; }
+    public List<Hero> getHeroes() { return java.util.Collections.unmodifiableList(heroes); }
     public void setHeroes(List<Hero> heroes) { this.heroes = heroes; }
     
-    public List<Equipment> getEquipmentList() { return equipmentList; }
+    public List<Equipment> getEquipmentList() { return java.util.Collections.unmodifiableList(equipmentList); }
     public void setEquipmentList(List<Equipment> equipmentList) { this.equipmentList = equipmentList; }
     
-    public List<Team> getTeams() { return teams; }
+    public List<Team> getTeams() { return java.util.Collections.unmodifiableList(teams); }
     public void setTeams(List<Team> teams) { this.teams = teams; }
     
-    public List<MatchRecord> getMatchRecords() { return matchRecords; }
+    public List<MatchRecord> getMatchRecords() { return java.util.Collections.unmodifiableList(matchRecords); }
     public void setMatchRecords(List<MatchRecord> matchRecords) { this.matchRecords = matchRecords; }
 }

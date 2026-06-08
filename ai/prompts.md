@@ -431,3 +431,20 @@ The AI verified the structural alignment by compiling the project, confirming ze
 
 ### My Decision
 Accepted these necessary modifications. Synchronizing the utility scripts and file storage mechanisms ensures the data persistence layer remains functional and seamlessly incorporates our recent model refactoring updates.
+
+## Prompt 19
+Time: 2026-06-09 01:47
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer and Implementation Agent
+Related Commit: 1b40bbc
+
+### My Prompt
+I am planning to move on to the next phase: the frontend. Please check if my backend meets all the requirements and is sufficiently robust.
+
+### AI Response Summary
+The AI confirmed that the backend's core coursework requirements, thread-safety architecture, and previous business-logic calculations are excellent. However, it caught a critical Object-Oriented memory flaw regarding referential integrity before frontend development:
+* **The "Ghost Object" Update Flaw**: Discovered that the `updatePlayer` method was using `players.set(i, updatedPlayer)`, which overwrites the underlying heap memory reference. Because associated collections (like a `Team` object's member roster) still hold a memory pointer to the old `Player` instance, updates made by an admin wouldn't sync or cascade across the application UI.
+* **The Fix**: Refactored the `GameDataManager` update methods (`updatePlayer`, `updateHero`, etc.) to iterate through lists, locate the matching unique identifier, and mutate the fields of the *existing* memory reference directly using setters rather than replacing the object itself.
+
+### My Decision
+Accepted and applied the changes. Mutating the fields on the existing object references ensures that all multi-layered relationships—like teams and match histories—remain perfectly synchronized during live execution.

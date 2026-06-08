@@ -36,6 +36,12 @@ public class DataInitializer {
                 new Hero("Eridan"), new Hero("Phoenix"), new Hero("Wilbur"),
                 new Hero("Vez'nan"), new Hero("Asra"), new Hero("Eiskalt"),
                 new Hero("Boneheart"), new Hero("Anya"), new Hero("Nyru")));
+        
+        java.util.Random rand = new java.util.Random();
+        model.HeroType[] types = model.HeroType.values();
+        for (Hero hero : heroes) {
+            hero.setType(types[rand.nextInt(types.length)]);
+        }
 
         // 3. Initialize 15 Players (for 3 teams of 5)
         List<Player> players = new ArrayList<>(List.of(
@@ -83,8 +89,6 @@ public class DataInitializer {
                 new MatchRecord(team2, team3, MatchResult.DRAW),
                 new MatchRecord(team3, team1, MatchResult.TEAM_A_WIN),
                 new MatchRecord(team1, team2, MatchResult.TEAM_A_WIN)));
-
-        java.util.Random rand = new java.util.Random();
 
         // Update statistics and populate picks based on mock match records
         for (MatchRecord record : matchRecords) {

@@ -82,8 +82,15 @@ private GameDataManager() {
     public boolean removePlayer(String playerId) {
         boolean removed = players.removeIf(p -> p.getId().equals(playerId));
         if (removed) {
-            for (Team team : teams) {
-                team.getMembers().removeIf(p -> p.getId().equals(playerId));
+            synchronized (teams) {
+                for (Team team : teams) {
+                    team.getMembers().removeIf(p -> p.getId().equals(playerId));
+                }
+            }
+            synchronized (matchRecords) {
+                for (MatchRecord record : matchRecords) {
+                    record.getPlayerHeroPicks().remove(playerId);
+                }
             }
         }
         return removed;
@@ -92,11 +99,15 @@ private GameDataManager() {
     public boolean removeHero(String heroId) {
         boolean removed = heroes.removeIf(h -> h.getId().equals(heroId));
         if (removed) {
-            for (Player player : players) {
-                player.getOwnedHeroes().removeIf(h -> h.getId().equals(heroId));
+            synchronized (players) {
+                for (Player player : players) {
+                    player.getOwnedHeroes().removeIf(h -> h.getId().equals(heroId));
+                }
             }
-            for (MatchRecord record : matchRecords) {
-                record.getPlayerHeroPicks().values().removeIf(id -> id.equals(heroId));
+            synchronized (matchRecords) {
+                for (MatchRecord record : matchRecords) {
+                    record.getPlayerHeroPicks().values().removeIf(id -> id.equals(heroId));
+                }
             }
         }
         return removed;
@@ -105,9 +116,11 @@ private GameDataManager() {
     public boolean removeEquipment(String equipmentId) {
         boolean removed = equipmentList.removeIf(e -> e.getId().equals(equipmentId));
         if (removed) {
-            for (Hero hero : heroes) {
-                hero.getCompatibleEquipments().removeIf(e -> e.getId().equals(equipmentId));
-                hero.getRecommendedEquipments().removeIf(e -> e.getId().equals(equipmentId));
+            synchronized (heroes) {
+                for (Hero hero : heroes) {
+                    hero.getCompatibleEquipments().removeIf(e -> e.getId().equals(equipmentId));
+                    hero.getRecommendedEquipments().removeIf(e -> e.getId().equals(equipmentId));
+                }
             }
         }
         return removed;
@@ -116,20 +129,27 @@ private GameDataManager() {
     public boolean removeTeam(String teamId) {
         boolean removed = teams.removeIf(t -> t.getId().equals(teamId));
         if (removed) {
-            for (Player player : players) {
-                if (player.getOwnTeam() != null && player.getOwnTeam().getId().equals(teamId)) {
-                    player.setOwnTeam(null);
+            synchronized (players) {
+                for (Player player : players) {
+                    if (player.getOwnTeam() != null && player.getOwnTeam().getId().equals(teamId)) {
+                        player.setOwnTeam(null);
+                    }
                 }
+            }
+            synchronized (matchRecords) {
+                matchRecords.removeIf(m -> m.getTeamA().getId().equals(teamId) || m.getTeamB().getId().equals(teamId));
             }
         }
         return removed;
     }
 
     public void updatePlayer(Player updatedPlayer) {
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getId().equals(updatedPlayer.getId())) {
-                players.set(i, updatedPlayer);
-                return;
+        synchronized (players) {
+            for (int i = 0; i < players.size(); i++) {
+                if (players.get(i).getId().equals(updatedPlayer.getId())) {
+                    players.set(i, updatedPlayer);
+                    return;
+                }
             }
         }
     }

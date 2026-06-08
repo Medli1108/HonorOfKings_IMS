@@ -323,9 +323,15 @@ private GameDataManager() {
 
     public void updatePlayer(Player updatedPlayer) {
         synchronized (players) {
-            for (int i = 0; i < players.size(); i++) {
-                if (players.get(i).getId().equals(updatedPlayer.getId())) {
-                    players.set(i, updatedPlayer);
+            for (Player existingPlayer : players) {
+                if (existingPlayer.getId().equals(updatedPlayer.getId())) {
+                    // Update properties while keeping the exact same memory reference
+                    existingPlayer.setName(updatedPlayer.getName());
+                    existingPlayer.setWinRate(updatedPlayer.getWinRate());
+                    existingPlayer.setLevel(updatedPlayer.getLevel());
+                    existingPlayer.setTotalMatches(updatedPlayer.getTotalMatches());
+                    existingPlayer.setWins(updatedPlayer.getWins());
+                    // The existingPlayer's ownTeam and ownedHeroes references stay intact
                     return;
                 }
             }
@@ -334,9 +340,15 @@ private GameDataManager() {
 
     public void updateHero(Hero updatedHero) {
         synchronized (heroes) {
-            for (int i = 0; i < heroes.size(); i++) {
-                if (heroes.get(i).getId().equals(updatedHero.getId())) {
-                    heroes.set(i, updatedHero);
+            for (Hero existingHero : heroes) {
+                if (existingHero.getId().equals(updatedHero.getId())) {
+                    existingHero.setName(updatedHero.getName());
+                    existingHero.setType(updatedHero.getType());
+                    existingHero.setBaseHp(updatedHero.getBaseHp());
+                    existingHero.setBaseAttack(updatedHero.getBaseAttack());
+                    // References to equipment lists stay intact, but you could clear and re-add if full replacement is desired:
+                    // existingHero.getCompatibleEquipments().clear();
+                    // existingHero.getCompatibleEquipments().addAll(updatedHero.getCompatibleEquipments());
                     return;
                 }
             }
@@ -345,9 +357,13 @@ private GameDataManager() {
 
     public void updateEquipment(Equipment updatedEquipment) {
         synchronized (equipmentList) {
-            for (int i = 0; i < equipmentList.size(); i++) {
-                if (equipmentList.get(i).getId().equals(updatedEquipment.getId())) {
-                    equipmentList.set(i, updatedEquipment);
+            for (Equipment existingEquipment : equipmentList) {
+                if (existingEquipment.getId().equals(updatedEquipment.getId())) {
+                    existingEquipment.setName(updatedEquipment.getName());
+                    existingEquipment.setUsageCount(updatedEquipment.getUsageCount());
+                    existingEquipment.setWinRate(updatedEquipment.getWinRate());
+                    existingEquipment.setAverageRating(updatedEquipment.getAverageRating());
+                    existingEquipment.setWins(updatedEquipment.getWins());
                     return;
                 }
             }
@@ -356,9 +372,12 @@ private GameDataManager() {
 
     public void updateTeam(Team updatedTeam) {
         synchronized (teams) {
-            for (int i = 0; i < teams.size(); i++) {
-                if (teams.get(i).getId().equals(updatedTeam.getId())) {
-                    teams.set(i, updatedTeam);
+            for (Team existingTeam : teams) {
+                if (existingTeam.getId().equals(updatedTeam.getId())) {
+                    existingTeam.setName(updatedTeam.getName());
+                    existingTeam.setTotalMatches(updatedTeam.getTotalMatches());
+                    existingTeam.setWins(updatedTeam.getWins());
+                    // We don't overwrite members list directly to prevent ghost reference bugs
                     return;
                 }
             }
@@ -367,9 +386,15 @@ private GameDataManager() {
 
     public void updateMatchRecord(MatchRecord updatedRecord) {
         synchronized (matchRecords) {
-            for (int i = 0; i < matchRecords.size(); i++) {
-                if (matchRecords.get(i).getId().equals(updatedRecord.getId())) {
-                    matchRecords.set(i, updatedRecord);
+            for (MatchRecord existingRecord : matchRecords) {
+                if (existingRecord.getId().equals(updatedRecord.getId())) {
+                    existingRecord.setResult(updatedRecord.getResult());
+                    existingRecord.setMatchDate(updatedRecord.getMatchDate());
+                    existingRecord.setTeamA(updatedRecord.getTeamA());
+                    existingRecord.setTeamB(updatedRecord.getTeamB());
+                    // For picks map
+                    existingRecord.getPlayerHeroPicks().clear();
+                    existingRecord.getPlayerHeroPicks().putAll(updatedRecord.getPlayerHeroPicks());
                     return;
                 }
             }

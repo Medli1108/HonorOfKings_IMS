@@ -16,9 +16,11 @@ public class SearchService {
         if (query == null || query.trim().isEmpty()) {
             return null;
         }
-        for (Player player : dataManager.getPlayers()) {
-            if (player.getId().equalsIgnoreCase(query) || player.getName().equalsIgnoreCase(query)) {
-                return player;
+        synchronized (dataManager.getPlayers()) {
+            for (Player player : dataManager.getPlayers()) {
+                if (player.getId().equalsIgnoreCase(query) || player.getName().equalsIgnoreCase(query)) {
+                    return player;
+                }
             }
         }
         return null;
@@ -28,9 +30,11 @@ public class SearchService {
         if (query == null || query.trim().isEmpty()) {
             return null;
         }
-        for (Team team : dataManager.getTeams()) {
-            if (team.getId().equalsIgnoreCase(query) || team.getName().equalsIgnoreCase(query)) {
-                return team;
+        synchronized (dataManager.getTeams()) {
+            for (Team team : dataManager.getTeams()) {
+                if (team.getId().equalsIgnoreCase(query) || team.getName().equalsIgnoreCase(query)) {
+                    return team;
+                }
             }
         }
         return null;
@@ -40,9 +44,11 @@ public class SearchService {
         if (name == null || name.trim().isEmpty()) {
             return null;
         }
-        for (Hero hero : dataManager.getHeroes()) {
-            if (hero.getName().equalsIgnoreCase(name)) {
-                return hero;
+        synchronized (dataManager.getHeroes()) {
+            for (Hero hero : dataManager.getHeroes()) {
+                if (hero.getName().equalsIgnoreCase(name)) {
+                    return hero;
+                }
             }
         }
         return null;
@@ -65,12 +71,14 @@ public class SearchService {
         
         // Loop backwards to get the most recent matches (assuming appended in chronological order)
         List<MatchRecord> allMatches = dataManager.getMatchRecords();
-        for (int i = allMatches.size() - 1; i >= 0; i--) {
-            MatchRecord record = allMatches.get(i);
-            if (record.getTeamA().getId().equals(teamId) || record.getTeamB().getId().equals(teamId)) {
-                history.add(record);
-                if (history.size() >= limit) {
-                    break;
+        synchronized (allMatches) {
+            for (int i = allMatches.size() - 1; i >= 0; i--) {
+                MatchRecord record = allMatches.get(i);
+                if (record.getTeamA().getId().equals(teamId) || record.getTeamB().getId().equals(teamId)) {
+                    history.add(record);
+                    if (history.size() >= limit) {
+                        break;
+                    }
                 }
             }
         }

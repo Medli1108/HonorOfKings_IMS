@@ -161,7 +161,7 @@ private GameDataManager() {
     }
 
     public void setPlayers(List<Player> players) {
-        this.players = players;
+        this.players = java.util.Collections.synchronizedList(new ArrayList<>(players));
     }
 
     public List<Admin> getAdmins() {
@@ -169,7 +169,7 @@ private GameDataManager() {
     }
 
     public void setAdmins(List<Admin> admins) {
-        this.admins = admins;
+        this.admins = java.util.Collections.synchronizedList(new ArrayList<>(admins));
     }
 
     public List<Hero> getHeroes() {
@@ -177,7 +177,7 @@ private GameDataManager() {
     }
 
     public void setHeroes(List<Hero> heroes) {
-        this.heroes = heroes;
+        this.heroes = java.util.Collections.synchronizedList(new ArrayList<>(heroes));
     }
 
     public List<Equipment> getEquipmentList() {
@@ -185,7 +185,7 @@ private GameDataManager() {
     }
 
     public void setEquipmentList(List<Equipment> equipmentList) {
-        this.equipmentList = equipmentList;
+        this.equipmentList= java.util.Collections.synchronizedList(new ArrayList<>(equipmentList));
     }
 
     public List<Team> getTeams() {
@@ -193,7 +193,7 @@ private GameDataManager() {
     }
 
     public void setTeams(List<Team> teams) {
-        this.teams = teams;
+        this.teams = java.util.Collections.synchronizedList(new ArrayList<>(teams));
     }
 
     public List<MatchRecord> getMatchRecords() {
@@ -201,6 +201,6 @@ private GameDataManager() {
     }
 
     public void setMatchRecords(List<MatchRecord> matchRecords) {
-        this.matchRecords = matchRecords;
+        this.matchRecords = java.util.Collections.synchronizedList(new ArrayList<>(matchRecords));
     }
 }

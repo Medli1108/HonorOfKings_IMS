@@ -338,3 +338,22 @@ The AI identified and resolved several critical runtime data integrity and synch
 
 ### My Decision
 Accepted the changes to increase system robustness and prevent concurrent modification exceptions during runtime execution.
+
+## Prompt 15
+Time: 2026-06-08 19:32
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer and Implementation Agent
+Related Commit: 6dd72ca
+
+### My Prompt
+Is there anything wrong with the backend code? If not, I am planning to build the front-end interface
+
+### AI Response Summary
+The AI verified that the object-oriented foundation is sound but identified two critical concurrency vulnerabilities introduced by recent thread-safety refactoring that would cause runtime crashes during frontend integration:
+1. **Critical Bug ("Thread-Safety Wipeout")**: Discovered that when `FileStorageService.loadData()` reads data from CSV files, it instantiates standard, non-thread-safe `ArrayList` objects and passes them to `GameDataManager` via setter methods—accidentally stripping away the original `Collections.synchronizedList()` wrappers. 
+   * *Fix*: Update all setter methods inside `GameDataManager.java` to automatically re-wrap any incoming collection inside a `Collections.synchronizedList()`.
+2. **Code Smell (Unsafe Collection Iteration)**: Noted that `SearchService.java` and `AuthenticationService.java` utilize standard `for-each` loops to iterate over data collections without explicit synchronization blocks. This exposes the app to `ConcurrentModificationException` errors if a frontend thread writes to a list while a backend service thread reads it.
+   * *Fix*: Explicitly wrap all looping lookups inside `synchronized (dataManager.getList())` guard blocks.
+
+### My Decision
+Accepted the changes. I will implement the recommended setter modifications and loop synchronization guards across the service classes to guarantee comprehensive thread safety before initiating frontend development.

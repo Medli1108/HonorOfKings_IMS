@@ -41,6 +41,8 @@ public class DataInitializer {
         model.HeroType[] types = model.HeroType.values();
         for (Hero hero : heroes) {
             hero.setType(types[rand.nextInt(types.length)]);
+            hero.setBaseHp(3000 + rand.nextInt(2001)); 
+            hero.setBaseAttack(150 + rand.nextInt(201));
         }
 
         // 3. Initialize 15 Players (for 3 teams of 5)

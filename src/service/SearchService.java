@@ -63,8 +63,7 @@ public class SearchService {
     public List<MatchRecord> getMatchHistoryForTeam(String teamId, int limit) {
         List<MatchRecord> history = new ArrayList<>();
 
-        // Loop backwards to get the most recent matches (assuming appended in
-        // chronological order)
+        // Loop backwards to get the most recent matches (assuming appended in chronological order)
         List<MatchRecord> allMatches = dataManager.getMatchRecords();
         for (int i = allMatches.size() - 1; i >= 0; i--) {
             MatchRecord record = allMatches.get(i);
@@ -95,5 +94,29 @@ public List<Player> findPlayersByHero(String heroId) {
         }
         
         return playersWithHero;
+    }
+
+    public double calculateHeroPickRate(List<MatchRecord> matches, String heroId) {
+        if (matches == null || matches.isEmpty() || heroId == null || heroId.trim().isEmpty()) {
+            return 0.0;
+        }
+
+        int totalPicksAcrossMatches = 0;
+        int heroPickCount = 0;
+
+        for (MatchRecord match : matches) {
+            for (String pickedHeroId : match.getPlayerHeroPicks().values()) {
+                totalPicksAcrossMatches++;
+                if (pickedHeroId.equals(heroId)) {
+                    heroPickCount++;
+                }
+            }
+        }
+
+        if (totalPicksAcrossMatches == 0) {
+            return 0.0;
+        }
+
+        return ((double) heroPickCount / totalPicksAcrossMatches) * 100.0;
     }
 }

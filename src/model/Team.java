@@ -21,9 +21,19 @@ public class Team implements Searchable {
         this.members = members;
         this.totalMatches = 0;
         this.wins = 0;
-
-        // Link the players to this team
         for (Player player : members) {
+            player.setOwnTeam(this);
+        }
+    }
+
+    // File I/O constructor
+    public Team(String id, String name, List<Player> members, int totalMatches, int wins) {
+        this.id = id;
+        this.name = name;
+        this.members = members;
+        this.totalMatches = totalMatches;
+        this.wins = wins;
+        for (Player player : this.members) {
             player.setOwnTeam(this);
         }
     }
@@ -41,18 +51,6 @@ public class Team implements Searchable {
     public double calculateWinRate() {
         if (totalMatches == 0) return 0.0;
         return (double) wins / totalMatches;
-    }
-
-    // File I/O constructor
-    public Team(String id, String name, List<Player> members, int totalMatches, int wins) {
-        this.id = id;
-        this.name = name;
-        this.members = members;
-        this.totalMatches = totalMatches;
-        this.wins = wins;
-        for (Player player : this.members) {
-            player.setOwnTeam(this);
-        }
     }
 
     // Getters and Setters

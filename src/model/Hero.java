@@ -16,6 +16,7 @@ public class Hero implements Searchable {
     // Associations
     private List<Equipment> compatibleEquipments;
     private List<Equipment> recommendedEquipments;
+    private List<Equipment> currentEquipments;
 
     // Minimal constructor to satisfy DataInitializer
     public Hero(String name) {
@@ -23,8 +24,20 @@ public class Hero implements Searchable {
         this.name = name;
         this.compatibleEquipments = new ArrayList<>();
         this.recommendedEquipments = new ArrayList<>();
+        this.currentEquipments = new ArrayList<>();
     }
 
+    // File I/O constructor
+    public Hero(String id, String name, HeroType type, int baseHp, int baseAttack, List<Equipment> compatibleEquipments, List<Equipment> recommendedEquipments, List<Equipment> currEquipments) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.baseHp = baseHp;
+        this.baseAttack = baseAttack;
+        this.compatibleEquipments = compatibleEquipments;
+        this.recommendedEquipments = recommendedEquipments;
+        this.currentEquipments = currEquipments;
+    }
     // Getters and setters
     public String getId() {
         return this.id;
@@ -47,6 +60,9 @@ public class Hero implements Searchable {
     public List<Equipment> getRecommendedEquipments() {
         return recommendedEquipments;
     }
+    public List<Equipment> getCurrentEquipments() {
+        return currentEquipments;
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -59,6 +75,9 @@ public class Hero implements Searchable {
     public void setBaseAttack(int baseAttack) {
         this.baseAttack = baseAttack;
     }
+    public void setCurrentEquipments(List<Equipment> currentEquipments) {
+        this.currentEquipments = currentEquipments;
+    }
 
     // Methods
     public void addCompatibleEquipment(Equipment equipment) {
@@ -68,16 +87,6 @@ public class Hero implements Searchable {
         this.recommendedEquipments.add(equipment);
     }
 
-    // File I/O constructor
-    public Hero(String id, String name, HeroType type, int baseHp, int baseAttack, List<Equipment> compatibleEquipments, ArrayList<Equipment> recommendedEquipments) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.baseHp = baseHp;
-        this.baseAttack = baseAttack;
-        this.compatibleEquipments = compatibleEquipments;
-        this.recommendedEquipments = recommendedEquipments;
-    }
 
 
 }

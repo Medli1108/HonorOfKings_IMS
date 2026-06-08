@@ -157,7 +157,9 @@ private GameDataManager() {
     // Getters and Setters for Data Access
 
     public List<Player> getPlayers() {
-        return java.util.Collections.unmodifiableList(players);
+        synchronized (players) {
+            return new ArrayList<>(players);
+        }
     }
 
     public void setPlayers(List<Player> players) {
@@ -165,7 +167,9 @@ private GameDataManager() {
     }
 
     public List<Admin> getAdmins() {
-        return java.util.Collections.unmodifiableList(admins);
+        synchronized (admins) {
+            return new ArrayList<>(admins);
+        }
     }
 
     public void setAdmins(List<Admin> admins) {
@@ -173,7 +177,9 @@ private GameDataManager() {
     }
 
     public List<Hero> getHeroes() {
-        return java.util.Collections.unmodifiableList(heroes);
+        synchronized (heroes) {
+            return new ArrayList<>(heroes);
+        }
     }
 
     public void setHeroes(List<Hero> heroes) {
@@ -181,7 +187,9 @@ private GameDataManager() {
     }
 
     public List<Equipment> getEquipmentList() {
-        return java.util.Collections.unmodifiableList(equipmentList);
+        synchronized (equipmentList) {
+            return new ArrayList<>(equipmentList);
+        }
     }
 
     public void setEquipmentList(List<Equipment> equipmentList) {
@@ -189,7 +197,9 @@ private GameDataManager() {
     }
 
     public List<Team> getTeams() {
-        return java.util.Collections.unmodifiableList(teams);
+        synchronized (teams) {
+            return new ArrayList<>(teams);
+        }
     }
 
     public void setTeams(List<Team> teams) {
@@ -197,10 +207,13 @@ private GameDataManager() {
     }
 
     public List<MatchRecord> getMatchRecords() {
-        return java.util.Collections.unmodifiableList(matchRecords);
+        synchronized (matchRecords) {
+            return new ArrayList<>(matchRecords);
+        }
     }
 
     public void setMatchRecords(List<MatchRecord> matchRecords) {
         this.matchRecords = java.util.Collections.synchronizedList(new ArrayList<>(matchRecords));
     }
 }
+

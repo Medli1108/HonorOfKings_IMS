@@ -280,3 +280,42 @@ The AI reviewed the entire codebase (excluding `Main.java`) and confirmed a soli
 
 ### My Decision
 Accepted all findings. I plan to follow the provided guidelines and step-by-step instructions to refactor the logic and fix these bugs myself rather than using an automated script.
+
+
+## Prompt 12
+Time: 2026-06-08 16:10
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer and Implementation Agent
+Related Commit: 5d57076
+
+### My Prompt
+Now that I have fixed the bugs (I think so), act as an AI reviewer and implement agent, except for the Main.java, review if there are any problems in my code according to the plan. @plan.md
+
+### AI Response Summary
+The AI verified that the existing codebase and core data models are in excellent shape. However, it identified a missing architectural requirement based on `plan.md`:
+* **Missing Match History Data**: The code currently lacks a mechanism to track "heroes picked" during matches, which makes calculating "hero pick rate" for the final UI features impossible. The required mapping logic in `MatchRecord.java` was previously commented out.
+* **Proposed Solution**: The AI proposed uncommenting and implementing a `Map` structure within `MatchRecord` to bind players to their chosen heroes, updating `DataInitializer` to provide mock hero pick data, and extending `FileStorageService` to serialize this map into a CSV column using an ID-pair format (`playerId:heroId`).
+
+### My Decision
+Accepted the proposal. It makes sense to establish this underlying data architecture now so that the system remains fully compliant with the specification document before moving into the user interface development phase.
+
+
+## Prompt 13
+Time: 2026-06-08 18:50
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer and Implementation Agent
+Related Commit: 7d2fe97
+
+### My Prompt
+Except for Main.java, is there anything wrong with the code? If so, tell me how to solve these problems.
+
+### AI Response Summary
+The AI reiterated previous high-level architectural warnings and provided an actionable, 5-step concrete code implementation guide to resolve them:
+1. **Date-Parsing Fix (`FileStorageService.java`)**: Replaced `ISO_LOCAL_DATE_TIME` with a strict `DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")` to prevent truncation-induced parsing errors during file reads.
+2. **Scrubbing Dangling References (`GameDataManager.java`)**: Enhanced the `removeHero` method to actively iterate through all `MatchRecord` instances and remove deleted hero IDs from player hero pick histories.
+3. **Decoupling Sublist Views (`RankingService.java`)**: Wrapped the returned `subList` view inside a fresh `ArrayList` wrapper in `getPlayerLeaderboard` to prevent external logic from triggering structural concurrency errors.
+4. **Thread Safety Enforcement (`GameDataManager.java`)**: Wrapped the underlying master collections using `Collections.synchronizedList()` within the singleton constructor to safely enable multi-threaded operations.
+5. **Comparator Code Smell Refactor (`RankingService.java`)**: Clarified the sorting variables in `getRankedEquipment` by renaming `winRateCompare` to `winRateDescending` to improve immediate codebase readability.
+
+### My Decision
+Accepted the suggestions. I will integrate these five code adjustments into the codebase to stabilize the backend architecture before proceeding.

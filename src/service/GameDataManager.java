@@ -211,6 +211,7 @@ private GameDataManager() {
                 for (Hero hero : heroes) {
                     hero.getCompatibleEquipments().removeIf(e -> e.getId().equals(equipmentId));
                     hero.getRecommendedEquipments().removeIf(e -> e.getId().equals(equipmentId));
+                    hero.getCurrentEquipments().removeIf(e -> e.getId().equals(equipmentId));
                 }
             }
         }
@@ -218,6 +219,38 @@ private GameDataManager() {
     }
 
     public boolean removeTeam(String teamId) {
+        // Verify team exists before we begin cascading deletes
+        boolean teamExists = false;
+        synchronized (teams) {
+            for (Team t : teams) {
+                if (t.getId().equals(teamId)) {
+                    teamExists = true;
+                    break;
+                }
+            }
+        }
+        
+        if (!teamExists) {
+            return false;
+        }
+
+        // 1. Identify all matches involving this team
+        List<String> matchesToRemove = new ArrayList<>();
+        synchronized (matchRecords) {
+            for (MatchRecord m : matchRecords) {
+                if ((m.getTeamA() != null && m.getTeamA().getId().equals(teamId)) || 
+                    (m.getTeamB() != null && m.getTeamB().getId().equals(teamId))) {
+                    matchesToRemove.add(m.getId());
+                }
+            }
+        }
+
+        // 2. Safely rollback stats for all matches involving this team using the existing rigorous logic
+        for (String matchId : matchesToRemove) {
+            removeMatchRecord(matchId);
+        }
+
+        // 3. Remove the team itself
         boolean removed = teams.removeIf(t -> t.getId().equals(teamId));
         if (removed) {
             synchronized (players) {
@@ -226,9 +259,6 @@ private GameDataManager() {
                         player.setOwnTeam(null);
                     }
                 }
-            }
-            synchronized (matchRecords) {
-                matchRecords.removeIf(m -> m.getTeamA().getId().equals(teamId) || m.getTeamB().getId().equals(teamId));
             }
         }
         return removed;

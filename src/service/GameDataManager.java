@@ -88,19 +88,21 @@ private GameDataManager() {
             
             if (teamA != null) {
                 teamA.setTotalMatches(teamA.getTotalMatches() + 1);
-                for (Player player : teamA.getMembers()) {
-                    player.setTotalMatches(player.getTotalMatches() + 1);
-                    player.setWinRate(player.getTotalMatches() > 0 ? (double)player.getWins() / player.getTotalMatches() : 0.0);
-                    
-                    String pickedHeroId = record.getPlayerHeroPicks().get(player.getId());
-                    if (pickedHeroId != null) {
-                        for (Hero hero : player.getOwnedHeroes()) {
-                            if (hero.getId().equals(pickedHeroId)) {
-                                for (Equipment equipment : hero.getCurrentEquipments()) {
-                                    equipment.setUsageCount(equipment.getUsageCount() + 1);
-                                    equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
+                synchronized (teamA.getMembers()) {
+                    for (Player player : teamA.getMembers()) {
+                        player.setTotalMatches(player.getTotalMatches() + 1);
+                        player.setWinRate(player.getTotalMatches() > 0 ? (double)player.getWins() / player.getTotalMatches() : 0.0);
+                        
+                        String pickedHeroId = record.getPlayerHeroPicks().get(player.getId());
+                        if (pickedHeroId != null) {
+                            for (Hero hero : player.getOwnedHeroes()) {
+                                if (hero.getId().equals(pickedHeroId)) {
+                                    for (Equipment equipment : hero.getCurrentEquipments()) {
+                                        equipment.setUsageCount(equipment.getUsageCount() + 1);
+                                        equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
                     }
@@ -109,19 +111,21 @@ private GameDataManager() {
 
             if (teamB != null) {
                 teamB.setTotalMatches(teamB.getTotalMatches() + 1);
-                for (Player player : teamB.getMembers()) {
-                    player.setTotalMatches(player.getTotalMatches() + 1);
-                    player.setWinRate(player.getTotalMatches() > 0 ? (double)player.getWins() / player.getTotalMatches() : 0.0);
-                    
-                    String pickedHeroId = record.getPlayerHeroPicks().get(player.getId());
-                    if (pickedHeroId != null) {
-                        for (Hero hero : player.getOwnedHeroes()) {
-                            if (hero.getId().equals(pickedHeroId)) {
-                                for (Equipment equipment : hero.getCurrentEquipments()) {
-                                    equipment.setUsageCount(equipment.getUsageCount() + 1);
-                                    equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
+                synchronized (teamB.getMembers()) {
+                    for (Player player : teamB.getMembers()) {
+                        player.setTotalMatches(player.getTotalMatches() + 1);
+                        player.setWinRate(player.getTotalMatches() > 0 ? (double)player.getWins() / player.getTotalMatches() : 0.0);
+                        
+                        String pickedHeroId = record.getPlayerHeroPicks().get(player.getId());
+                        if (pickedHeroId != null) {
+                            for (Hero hero : player.getOwnedHeroes()) {
+                                if (hero.getId().equals(pickedHeroId)) {
+                                    for (Equipment equipment : hero.getCurrentEquipments()) {
+                                        equipment.setUsageCount(equipment.getUsageCount() + 1);
+                                        equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
                     }
@@ -130,38 +134,42 @@ private GameDataManager() {
 
             if (record.getResult() == MatchResult.TEAM_A_WIN && teamA != null) {
                 teamA.setWins(teamA.getWins() + 1);
-                for (Player player : teamA.getMembers()) {
-                    player.setWins(player.getWins() + 1);
-                    player.setWinRate(player.getTotalMatches() > 0 ? (double)player.getWins() / player.getTotalMatches() : 0.0);
-                    
-                    String pickedHeroId = record.getPlayerHeroPicks().get(player.getId());
-                    if (pickedHeroId != null) {
-                        for (Hero hero : player.getOwnedHeroes()) {
-                            if (hero.getId().equals(pickedHeroId)) {
-                                for (Equipment equipment : hero.getCurrentEquipments()) {
-                                    equipment.setWins(equipment.getWins() + 1);
-                                    equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
+                synchronized (teamA.getMembers()) {
+                    for (Player player : teamA.getMembers()) {
+                        player.setWins(player.getWins() + 1);
+                        player.setWinRate(player.getTotalMatches() > 0 ? (double)player.getWins() / player.getTotalMatches() : 0.0);
+                        
+                        String pickedHeroId = record.getPlayerHeroPicks().get(player.getId());
+                        if (pickedHeroId != null) {
+                            for (Hero hero : player.getOwnedHeroes()) {
+                                if (hero.getId().equals(pickedHeroId)) {
+                                    for (Equipment equipment : hero.getCurrentEquipments()) {
+                                        equipment.setWins(equipment.getWins() + 1);
+                                        equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
                     }
                 }
             } else if (record.getResult() == MatchResult.TEAM_B_WIN && teamB != null) {
                 teamB.setWins(teamB.getWins() + 1);
-                for (Player player : teamB.getMembers()) {
-                    player.setWins(player.getWins() + 1);
-                    player.setWinRate(player.getTotalMatches() > 0 ? (double)player.getWins() / player.getTotalMatches() : 0.0);
-                    
-                    String pickedHeroId = record.getPlayerHeroPicks().get(player.getId());
-                    if (pickedHeroId != null) {
-                        for (Hero hero : player.getOwnedHeroes()) {
-                            if (hero.getId().equals(pickedHeroId)) {
-                                for (Equipment equipment : hero.getCurrentEquipments()) {
-                                    equipment.setWins(equipment.getWins() + 1);
-                                    equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
+                synchronized (teamB.getMembers()) {
+                    for (Player player : teamB.getMembers()) {
+                        player.setWins(player.getWins() + 1);
+                        player.setWinRate(player.getTotalMatches() > 0 ? (double)player.getWins() / player.getTotalMatches() : 0.0);
+                        
+                        String pickedHeroId = record.getPlayerHeroPicks().get(player.getId());
+                        if (pickedHeroId != null) {
+                            for (Hero hero : player.getOwnedHeroes()) {
+                                if (hero.getId().equals(pickedHeroId)) {
+                                    for (Equipment equipment : hero.getCurrentEquipments()) {
+                                        equipment.setWins(equipment.getWins() + 1);
+                                        equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
                     }
@@ -416,17 +424,28 @@ private GameDataManager() {
 
     public void updateMatchRecord(MatchRecord updatedRecord) {
         synchronized (matchRecords) {
-            for (MatchRecord existingRecord : matchRecords) {
-                if (existingRecord.getId().equals(updatedRecord.getId())) {
-                    existingRecord.setResult(updatedRecord.getResult());
-                    existingRecord.setMatchDate(updatedRecord.getMatchDate());
-                    existingRecord.setTeamA(updatedRecord.getTeamA());
-                    existingRecord.setTeamB(updatedRecord.getTeamB());
-                    // For picks map
-                    existingRecord.getPlayerHeroPicks().clear();
-                    existingRecord.getPlayerHeroPicks().putAll(updatedRecord.getPlayerHeroPicks());
-                    return;
+            MatchRecord existingRecord = null;
+            for (MatchRecord m : matchRecords) {
+                if (m.getId().equals(updatedRecord.getId())) {
+                    existingRecord = m;
+                    break;
                 }
+            }
+            
+            if (existingRecord != null) {
+                // 1. Rollback old stats
+                removeMatchRecord(existingRecord.getId());
+                
+                // 2. Update record data
+                existingRecord.setResult(updatedRecord.getResult());
+                existingRecord.setMatchDate(updatedRecord.getMatchDate());
+                existingRecord.setTeamA(updatedRecord.getTeamA());
+                existingRecord.setTeamB(updatedRecord.getTeamB());
+                existingRecord.getPlayerHeroPicks().clear();
+                existingRecord.getPlayerHeroPicks().putAll(updatedRecord.getPlayerHeroPicks());
+                
+                // 3. Re-apply the stats with new data
+                addMatchRecord(existingRecord);
             }
         }
     }

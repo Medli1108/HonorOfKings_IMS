@@ -46,7 +46,7 @@ public class Team implements Searchable {
             // First compare by win rate
             if (p.getWinRate() > topPlayer.getWinRate()) {
                 topPlayer = p;
-            } else if (p.getWinRate() == topPlayer.getWinRate()) {
+            } else if (Double.compare(p.getWinRate(), topPlayer.getWinRate()) == 0) {
                 // Tie breaker: compare by level
                 if (p.getLevel() > topPlayer.getLevel()) {
                     topPlayer = p;

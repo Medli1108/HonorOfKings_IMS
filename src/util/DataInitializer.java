@@ -3,6 +3,7 @@ package util;
 import model.Admin;
 import model.Equipment;
 import model.Hero;
+import model.HeroType;
 import model.Player;
 import model.Team;
 import model.MatchRecord;
@@ -11,11 +12,12 @@ import service.GameDataManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class DataInitializer {
 
     public static void initialize() {
-
+        Random rand = new Random(2026);
         // 1. Initialize 20 Equipment Items
         List<Equipment> equipments = new ArrayList<>(List.of(
                 new Equipment("The Master Sword"), new Equipment("Hookshot"),
@@ -31,19 +33,22 @@ public class DataInitializer {
 
         // 2. Initialize 15 Heroes
         List<Hero> heroes = new ArrayList<>(List.of(
-                new Hero("Gerald"), new Hero("Magnus"), new Hero("Elora"),
-                new Hero("Alric"), new Hero("Dante"), new Hero("Nivus"),
-                new Hero("Eridan"), new Hero("Phoenix"), new Hero("Wilbur"),
-                new Hero("Vez'nan"), new Hero("Asra"), new Hero("Eiskalt"),
-                new Hero("Boneheart"), new Hero("Anya"), new Hero("Nyru")));
-        
-        java.util.Random rand = new java.util.Random();
-        model.HeroType[] types = model.HeroType.values();
-        for (Hero hero : heroes) {
-            hero.setType(types[rand.nextInt(types.length)]);
-            hero.setBaseHp(3000 + rand.nextInt(2001)); 
-            hero.setBaseAttack(150 + rand.nextInt(201));
-        }
+                new Hero("Gerald", HeroType.WARRIOR, 3000, 15), 
+                new Hero("Magnus", HeroType.MAGE, 1200, 30), 
+                new Hero("Elora", HeroType.MAGE, 2400, 25),
+                new Hero("Alric", HeroType.WARRIOR, 2600, 18), 
+                new Hero("Dante", HeroType.ELF, 2000, 22), 
+                new Hero("Nivus", HeroType.MAGE, 1500,28),
+                new Hero("Eridan", HeroType.ELF, 2400, 22), 
+                new Hero("Phoenix", HeroType.DRAGON, 1000, 15), 
+                new Hero("Wilbur", HeroType.DRAGON, 1500, 12),
+                new Hero("Vez'nan", HeroType.MAGE, 1800, 24), 
+                new Hero("Asra", HeroType.ASSASSIN, 1400, 22), 
+                new Hero("Eiskalt", HeroType.DRAGON, 2000, 20),
+                new Hero("Boneheart", HeroType.DRAGON, 1500, 12), 
+                new Hero("Anya", HeroType.ELF, 2200, 20), 
+                new Hero("Nyru", HeroType.MAGE, 1300, 26)
+            ));
 
         // 3. Initialize 15 Players (for 3 teams of 5)
         List<Player> players = new ArrayList<>(List.of(
@@ -75,6 +80,7 @@ public class DataInitializer {
             hero.addCompatibleEquipment(equipments.get(2));
 
             hero.addRecommendedEquipment(equipments.get(0));
+            hero.setCurrentEquipments(new ArrayList<>(List.of(equipments.get(0), equipments.get(1))));
         }
         // 4. Initialize 3 Teams with 5 players each
         Team team1 = new Team("Team Earth Pony", players.subList(0, 5));

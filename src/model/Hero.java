@@ -19,9 +19,12 @@ public class Hero implements Searchable {
     private List<Equipment> currentEquipments;
 
     // Minimal constructor to satisfy DataInitializer
-    public Hero(String name) {
+    public Hero(String name, HeroType type, int baseHp, int baseAttack) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
+        this.type = type;
+        this.baseHp = baseHp;
+        this.baseAttack = baseAttack;
         this.compatibleEquipments = new ArrayList<>();
         this.recommendedEquipments = new ArrayList<>();
         this.currentEquipments = new ArrayList<>();

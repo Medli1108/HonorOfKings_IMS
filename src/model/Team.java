@@ -38,7 +38,24 @@ public class Team implements Searchable {
         }
     }
 
-    // Architectural skeleton for future calculation methods
+    public Player getTopPlayer() {
+        if (members == null || members.isEmpty()) return null;
+        Player topPlayer = members.get(0);
+        for (int i = 1; i < members.size(); i++) {
+            Player p = members.get(i);
+            // First compare by win rate
+            if (p.getWinRate() > topPlayer.getWinRate()) {
+                topPlayer = p;
+            } else if (p.getWinRate() == topPlayer.getWinRate()) {
+                // Tie breaker: compare by level
+                if (p.getLevel() > topPlayer.getLevel()) {
+                    topPlayer = p;
+                }
+            }
+        }
+        return topPlayer;
+    }
+
     public double calculateAverageLevel() {
         if (members == null || members.isEmpty()) return 0.0;
         double averageLevel = 0.0;

@@ -19,7 +19,7 @@ public class RankingService {
         List<Equipment> rankedList = new ArrayList<>(dataManager.getEquipmentList());
         // Sort by win rate descending, then by usage count descending
         rankedList.sort((e1, e2) -> {
-            int winRateDescending = Double.compare(e2.getWinRateContribution(), e1.getWinRateContribution());
+            int winRateDescending = Double.compare(e2.getWinRate(), e1.getWinRate());
             if (winRateDescending != 0)
                 return winRateDescending;
 

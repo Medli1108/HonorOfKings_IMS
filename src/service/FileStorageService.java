@@ -73,34 +73,35 @@ public class FileStorageService {
 
     private void saveEquipments(List<Equipment> equipments) {
         List<String> lines = new ArrayList<>();
-        lines.add("id,name,usageCount,winRateContribution,averageRating");
+        lines.add("id,name,usageCount,winRate,averageRating,wins");
         for (Equipment eq : equipments) {
             lines.add(eq.getId() + "," + escape(eq.getName()) + "," + eq.getUsageCount() + "," +
-                    eq.getWinRateContribution() + "," + eq.getAverageRating());
+                    eq.getWinRate() + "," + eq.getAverageRating() + "," + eq.getWins());
         }
         writeLines(EQUIPMENTS_FILE, lines);
     }
 
     private void saveHeroes(List<Hero> heroes) {
         List<String> lines = new ArrayList<>();
-        lines.add("id,name,type,baseHp,baseAttack,compatibleEquipments,recommendedEquipments");
+        lines.add("id,name,type,baseHp,baseAttack,compatibleEquipments,recommendedEquipments,currentEquipments");
         for (Hero hero : heroes) {
             String compEq = hero.getCompatibleEquipments().stream().map(Equipment::getId).collect(Collectors.joining("|"));
             String recEq = hero.getRecommendedEquipments().stream().map(Equipment::getId).collect(Collectors.joining("|"));
+            String currEq = hero.getCurrentEquipments().stream().map(Equipment::getId).collect(Collectors.joining("|"));
             lines.add(hero.getId() + "," + escape(hero.getName()) + "," +
                     (hero.getType() != null ? hero.getType().name() : "") + "," +
                     hero.getBaseHp() + "," + hero.getBaseAttack() + "," +
-                    compEq + "," + recEq);
+                    compEq + "," + recEq + "," + currEq);
         }
         writeLines(HEROES_FILE, lines);
     }
 
     private void savePlayers(List<Player> players) {
         List<String> lines = new ArrayList<>();
-        lines.add("id,name,winRate,level,ownedHeroes");
+        lines.add("id,name,winRate,level,totalMatches,wins,ownedHeroes");
         for (Player p : players) {
             String ownedHeroes = p.getOwnedHeroes().stream().map(Hero::getId).collect(Collectors.joining("|"));
-            lines.add(p.getId() + "," + escape(p.getName()) + "," + p.getWinRate() + "," + p.getLevel() + "," + ownedHeroes);
+            lines.add(p.getId() + "," + escape(p.getName()) + "," + p.getWinRate() + "," + p.getLevel() + "," + p.getTotalMatches() + "," + p.getWins() + "," + ownedHeroes);
         }
         writeLines(PLAYERS_FILE, lines);
     }
@@ -174,9 +175,9 @@ public class FileStorageService {
         List<String> lines = readLines(EQUIPMENTS_FILE);
         for (int i = 1; i < lines.size(); i++) {
             String[] parts = lines.get(i).split(",", -1);
-            if (parts.length >= 5) {
+            if (parts.length >= 6) {
                 equipments.add(new Equipment(parts[0], unescape(parts[1]), Integer.parseInt(parts[2]),
-                        Double.parseDouble(parts[3]), Double.parseDouble(parts[4])));
+                        Double.parseDouble(parts[3]), Double.parseDouble(parts[4]), Integer.parseInt(parts[5])));
             }
         }
         return equipments;
@@ -187,7 +188,7 @@ public class FileStorageService {
         List<String> lines = readLines(HEROES_FILE);
         for (int i = 1; i < lines.size(); i++) {
             String[] parts = lines.get(i).split(",", -1);
-            if (parts.length >= 7) {
+            if (parts.length >= 8) {
                 String id = parts[0];
                 String name = unescape(parts[1]);
                 HeroType type = parts[2].isEmpty() ? null : HeroType.valueOf(parts[2]);
@@ -207,8 +208,15 @@ public class FileStorageService {
                         if (eqMap.containsKey(eqId)) recEq.add(eqMap.get(eqId));
                     }
                 }
+
+                ArrayList<Equipment> currEq = new ArrayList<>();
+                if (!parts[7].isEmpty()) {
+                    for (String eqId : parts[7].split("\\|")) {
+                        if (eqMap.containsKey(eqId)) currEq.add(eqMap.get(eqId));
+                    }
+                }
                 
-                heroes.add(new Hero(id, name, type, baseHp, baseAttack, compEq, recEq));
+                heroes.add(new Hero(id, name, type, baseHp, baseAttack, compEq, recEq, currEq));
             }
         }
         return heroes;
@@ -219,15 +227,17 @@ public class FileStorageService {
         List<String> lines = readLines(PLAYERS_FILE);
         for (int i = 1; i < lines.size(); i++) {
             String[] parts = lines.get(i).split(",", -1);
-            if (parts.length >= 5) {
+            if (parts.length >= 7) {
                 String id = parts[0];
                 String name = unescape(parts[1]);
                 double winRate = Double.parseDouble(parts[2]);
                 int level = Integer.parseInt(parts[3]);
+                int totalMatches = Integer.parseInt(parts[4]);
+                int wins = Integer.parseInt(parts[5]);
                 
-                Player p = new Player(id, name, winRate, level);
-                if (!parts[4].isEmpty()) {
-                    for (String hId : parts[4].split("\\|")) {
+                Player p = new Player(id, name, winRate, level, totalMatches, wins);
+                if (!parts[6].isEmpty()) {
+                    for (String hId : parts[6].split("\\|")) {
                         if (heroMap.containsKey(hId)) p.addHero(heroMap.get(hId));
                     }
                 }

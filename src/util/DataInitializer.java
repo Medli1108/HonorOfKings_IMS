@@ -102,10 +102,23 @@ public class DataInitializer {
             tA.setTotalMatches(tA.getTotalMatches() + 1);
             tB.setTotalMatches(tB.getTotalMatches() + 1);
             
+            for (Player player : tA.getMembers()) {
+                player.setTotalMatches(player.getTotalMatches() + 1);
+            }
+            for (Player player : tB.getMembers()) {
+                player.setTotalMatches(player.getTotalMatches() + 1);
+            }
+
             if (record.getResult() == MatchResult.TEAM_A_WIN) {
                 tA.setWins(tA.getWins() + 1);
+                for (Player player : tA.getMembers()) {
+                    player.setWins(player.getWins() + 1);
+                }
             } else if (record.getResult() == MatchResult.TEAM_B_WIN) {
                 tB.setWins(tB.getWins() + 1);
+                for (Player player : tB.getMembers()) {
+                    player.setWins(player.getWins() + 1);
+                }
             }
 
             // Simulate hero picks for players in this match
@@ -126,13 +139,22 @@ public class DataInitializer {
         // Randomly bump player win rates and levels so they aren't all 0
         for (Player player : players) {
             player.setLevel(rand.nextInt(30) + 1); // Level 1 to 30
-            player.setWinRate(rand.nextDouble() * 100); // 0.0 to 100.0
+            if (player.getTotalMatches() > 0) {
+                player.setWinRate((double) player.getWins() / player.getTotalMatches());
+            } else {
+                player.setWinRate(0.0);
+            }
         }
         
         // Randomly bump equipment stats
         for (Equipment eq : equipments) {
             eq.setUsageCount(rand.nextInt(500));
-            eq.setWinRateContribution(rand.nextDouble() * 10.0);
+            eq.setWins(rand.nextInt(eq.getUsageCount() + 1));
+            if (eq.getUsageCount() > 0) {
+                eq.setWinRate((double) eq.getWins() / eq.getUsageCount());
+            } else {
+                eq.setWinRate(0.0);
+            }
             eq.setAverageRating(1.0 + (4.0 * rand.nextDouble())); // 1.0 to 5.0
         }
 

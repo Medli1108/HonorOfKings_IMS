@@ -262,3 +262,21 @@ The AI implemented a comprehensive CSV-based File I/O solution for data persiste
 
 ### My Decision
 Accepted the implementation. Because Java File I/O is a completely new topic for me, I am trusting the AI's generated architecture for the time being. I will proceed by reviewing the code line-by-line to study how the underlying streams and parsing work, followed by rigorous manual testing to verify that data is correctly preserved across sessions.
+
+## Prompt 11
+Time: 2026-06-08 13:51
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer
+Related Commit: 724cf64
+
+### My Prompt
+Act as an AI reviewer, except for the Main.java, are there anything wrong with the code?
+
+### AI Response Summary
+The AI reviewed the entire codebase (excluding `Main.java`) and confirmed a solid object-oriented structure, but flagged several areas for improvement:
+* **Critical Logical Bugs**: Noted that `DataInitializer` creates match data without updating team/player stats (leaving leaderboards at zero), and warning of "dangling references" where deleting a global item leaves it orphaned in a player's private inventory list during active runtime execution.
+* **Exceptions & Edge Cases**: Identified an index risk in `getPlayerLeaderboard` if an invalid `topX` value is passed, and an unsafe date-parsing bug in `FileStorageService` due to how Java handles trailing zeros in time strings.
+* **Code Smells**: Pointed out a misleading variable name in equipment sorting and recommended adding the `synchronized` keyword to the `GameDataManager` singleton to ensure industry-standard thread safety.
+
+### My Decision
+Accepted all findings. I plan to follow the provided guidelines and step-by-step instructions to refactor the logic and fix these bugs myself rather than using an automated script.

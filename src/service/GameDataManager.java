@@ -62,9 +62,33 @@ public class GameDataManager {
         }
     }
 
-    public boolean removePlayer(String playerId) {
-        return players.removeIf(p -> p.getId().equals(playerId));
+    public void addHero(Hero hero) {
+        if (hero != null) {
+            heroes.add(hero);
+        }
     }
+
+    public void addEquipment(Equipment equipment) {
+        if (equipment != null) {
+            equipmentList.add(equipment);
+        }
+    }
+
+    public void addTeam(Team team) {
+        if (team != null) {
+            teams.add(team);
+        }
+    }
+
+public boolean removePlayer(String playerId) {
+    boolean removed = players.removeIf(p -> p.getId().equals(playerId));
+    if (removed) {
+        for (Team team : teams) {
+            team.getMembers().removeIf(p -> p.getId().equals(playerId));
+        }
+    }
+    return removed;
+}
 
     public boolean removeHero(String heroId) {
         boolean removed = heroes.removeIf(h -> h.getId().equals(heroId));
@@ -86,6 +110,18 @@ public class GameDataManager {
         }
         return removed;
     }
+
+public boolean removeTeam(String teamId) {
+    boolean removed = teams.removeIf(t -> t.getId().equals(teamId));
+    if (removed) {
+        for (Player player : players) {
+            if (player.getOwnTeam() != null && player.getOwnTeam().getId().equals(teamId)) {
+                player.setOwnTeam(null);
+            }
+        }
+    }
+    return removed;
+}
 
     public void updatePlayer(Player updatedPlayer) {
         for (int i = 0; i < players.size(); i++) {

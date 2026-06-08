@@ -154,6 +154,50 @@ private GameDataManager() {
         }
     }
 
+    public void updateHero(Hero updatedHero) {
+        synchronized (heroes) {
+            for (int i = 0; i < heroes.size(); i++) {
+                if (heroes.get(i).getId().equals(updatedHero.getId())) {
+                    heroes.set(i, updatedHero);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void updateEquipment(Equipment updatedEquipment) {
+        synchronized (equipmentList) {
+            for (int i = 0; i < equipmentList.size(); i++) {
+                if (equipmentList.get(i).getId().equals(updatedEquipment.getId())) {
+                    equipmentList.set(i, updatedEquipment);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void updateTeam(Team updatedTeam) {
+        synchronized (teams) {
+            for (int i = 0; i < teams.size(); i++) {
+                if (teams.get(i).getId().equals(updatedTeam.getId())) {
+                    teams.set(i, updatedTeam);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void updateMatchRecord(MatchRecord updatedRecord) {
+        synchronized (matchRecords) {
+            for (int i = 0; i < matchRecords.size(); i++) {
+                if (matchRecords.get(i).getId().equals(updatedRecord.getId())) {
+                    matchRecords.set(i, updatedRecord);
+                    return;
+                }
+            }
+        }
+    }
+
     // Getters and Setters for Data Access
 
     public List<Player> getPlayers() {

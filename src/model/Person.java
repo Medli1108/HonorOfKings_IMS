@@ -33,4 +33,7 @@ public abstract class Person implements Searchable {
         return this.role;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }

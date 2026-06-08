@@ -4,6 +4,7 @@ import model.*;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ public class FileStorageService {
     private static final String EQUIPMENTS_FILE = DATA_DIR + "equipments.csv";
     private static final String TEAMS_FILE = DATA_DIR + "teams.csv";
     private static final String MATCH_RECORDS_FILE = DATA_DIR + "match_records.csv";
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     // Write utilities
     private static void writeLines(String filePath, List<String> lines) {
@@ -117,7 +119,7 @@ public class FileStorageService {
         List<String> lines = new ArrayList<>();
         lines.add("id,teamA_id,teamB_id,result,matchDate");
         for (MatchRecord r : records) {
-            lines.add(r.getId() + "," + r.getTeamA().getId() + "," + r.getTeamB().getId() + "," + r.getResult().name() + "," + r.getMatchDate().toString());
+            lines.add(r.getId() + "," + r.getTeamA().getId() + "," + r.getTeamB().getId() + "," + r.getResult().name() + "," + r.getMatchDate().format(DATE_FORMATTER));
         }
         writeLines(MATCH_RECORDS_FILE, lines);
     }
@@ -266,7 +268,7 @@ public class FileStorageService {
                 Team teamA = teamMap.get(parts[1]);
                 Team teamB = teamMap.get(parts[2]);
                 MatchResult result = MatchResult.valueOf(parts[3]);
-                LocalDateTime date = LocalDateTime.parse(parts[4]);
+                LocalDateTime date = LocalDateTime.parse(parts[4], DATE_FORMATTER);
                 
                 if (teamA != null && teamB != null) {
                     records.add(new MatchRecord(id, teamA, teamB, result, date));

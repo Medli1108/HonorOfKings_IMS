@@ -84,6 +84,34 @@ public class DataInitializer {
                 new MatchRecord(team3, team1, MatchResult.TEAM_A_WIN),
                 new MatchRecord(team1, team2, MatchResult.TEAM_A_WIN)));
 
+        // Update statistics based on mock match records
+        for (MatchRecord record : matchRecords) {
+            Team tA = record.getTeamA();
+            Team tB = record.getTeamB();
+            tA.setTotalMatches(tA.getTotalMatches() + 1);
+            tB.setTotalMatches(tB.getTotalMatches() + 1);
+            
+            if (record.getResult() == MatchResult.TEAM_A_WIN) {
+                tA.setWins(tA.getWins() + 1);
+            } else if (record.getResult() == MatchResult.TEAM_B_WIN) {
+                tB.setWins(tB.getWins() + 1);
+            }
+        }
+        
+        // Randomly bump player win rates and levels so they aren't all 0
+        java.util.Random rand = new java.util.Random();
+        for (Player player : players) {
+            player.setLevel(rand.nextInt(30) + 1); // Level 1 to 30
+            player.setWinRate(rand.nextDouble() * 100); // 0.0 to 100.0
+        }
+        
+        // Randomly bump equipment stats
+        for (Equipment eq : equipments) {
+            eq.setUsageCount(rand.nextInt(500));
+            eq.setWinRateContribution(rand.nextDouble() * 10.0);
+            eq.setAverageRating(1.0 + (4.0 * rand.nextDouble())); // 1.0 to 5.0
+        }
+
         // 6. Initialize 4 Admins
         List<Admin> admins = new ArrayList<>(List.of(
             new Admin("Twilight Sparkle"), new Admin("Celestia"), 

@@ -30,7 +30,7 @@ public class GameDataManager {
     }
 
     // Public method to get the singleton instance
-    public static GameDataManager getInstance() {
+    public static synchronized GameDataManager getInstance() {
         if (instance == null) {
             instance = new GameDataManager();
         }
@@ -64,6 +64,27 @@ public class GameDataManager {
 
     public boolean removePlayer(String playerId) {
         return players.removeIf(p -> p.getId().equals(playerId));
+    }
+
+    public boolean removeHero(String heroId) {
+        boolean removed = heroes.removeIf(h -> h.getId().equals(heroId));
+        if (removed) {
+            for (Player player : players) {
+                player.getOwnedHeroes().removeIf(h -> h.getId().equals(heroId));
+            }
+        }
+        return removed;
+    }
+
+    public boolean removeEquipment(String equipmentId) {
+        boolean removed = equipmentList.removeIf(e -> e.getId().equals(equipmentId));
+        if (removed) {
+            for (Hero hero : heroes) {
+                hero.getCompatibleEquipments().removeIf(e -> e.getId().equals(equipmentId));
+                hero.getRecommendedEquipments().removeIf(e -> e.getId().equals(equipmentId));
+            }
+        }
+        return removed;
     }
 
     public void updatePlayer(Player updatedPlayer) {

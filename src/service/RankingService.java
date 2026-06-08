@@ -19,14 +19,15 @@ public class RankingService {
         List<Equipment> rankedList = new ArrayList<Equipment> (dataManager.getEquipmentList());
         // Sort by win rate descending, then by usage count descending
         rankedList.sort((e1, e2) -> {
-            int usageCompare = Double.compare(e2.getWinRateContribution(), e1.getWinRateContribution());
-            if (usageCompare != 0) return usageCompare;
+            int winRateCompare = Double.compare(e2.getWinRateContribution(), e1.getWinRateContribution());
+            if (winRateCompare != 0) return winRateCompare;
             return Integer.compare(e2.getUsageCount(), e1.getUsageCount());
         });
         return rankedList;
     }
 
     public List<Player> getPlayerLeaderboard(int topX) {
+        if (topX <= 0) return new ArrayList<>();
         List<Player> rankedPlayers = new ArrayList<Player>(dataManager.getPlayers());
         // Sort by win rate descending, then level descending
         rankedPlayers.sort((p1, p2) -> {

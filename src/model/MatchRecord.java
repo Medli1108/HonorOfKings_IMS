@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 public class MatchRecord {
@@ -12,8 +13,8 @@ public class MatchRecord {
     
     private LocalDateTime matchDate;
     
-    // Future architectural consideration: Track which player picked which hero in this match
-    // private Map<Player, Hero> picks;
+    // Tracks which player picked which hero in this match (Player ID -> Hero ID)
+    private Map<String, String> playerHeroPicks;
 
     // Minimal constructor to satisfy DataInitializer
     public MatchRecord(Team teamA, Team teamB, MatchResult result) {
@@ -22,15 +23,17 @@ public class MatchRecord {
         this.teamB = teamB;
         this.result = result;
         this.matchDate = LocalDateTime.now();
+        this.playerHeroPicks = new java.util.HashMap<>();
     }
     
     // File I/O constructor
-    public MatchRecord(String id, Team teamA, Team teamB, MatchResult result, LocalDateTime matchDate) {
+    public MatchRecord(String id, Team teamA, Team teamB, MatchResult result, LocalDateTime matchDate, Map<String, String> playerHeroPicks) {
         this.id = id;
         this.teamA = teamA;
         this.teamB = teamB;
         this.result = result;
         this.matchDate = matchDate;
+        this.playerHeroPicks = playerHeroPicks != null ? playerHeroPicks : new java.util.HashMap<>();
     }
 
     public String getId() {
@@ -71,5 +74,17 @@ public class MatchRecord {
 
     public void setMatchDate(LocalDateTime matchDate) {
         this.matchDate = matchDate;
+    }
+
+    public Map<String, String> getPlayerHeroPicks() {
+        return playerHeroPicks;
+    }
+
+    public void setPlayerHeroPicks(Map<String, String> playerHeroPicks) {
+        this.playerHeroPicks = playerHeroPicks;
+    }
+
+    public void addPick(String playerId, String heroId) {
+        this.playerHeroPicks.put(playerId, heroId);
     }
 }

@@ -84,7 +84,9 @@ public class DataInitializer {
                 new MatchRecord(team3, team1, MatchResult.TEAM_A_WIN),
                 new MatchRecord(team1, team2, MatchResult.TEAM_A_WIN)));
 
-        // Update statistics based on mock match records
+        java.util.Random rand = new java.util.Random();
+
+        // Update statistics and populate picks based on mock match records
         for (MatchRecord record : matchRecords) {
             Team tA = record.getTeamA();
             Team tB = record.getTeamB();
@@ -96,10 +98,23 @@ public class DataInitializer {
             } else if (record.getResult() == MatchResult.TEAM_B_WIN) {
                 tB.setWins(tB.getWins() + 1);
             }
+
+            // Simulate hero picks for players in this match
+            for (Player p : tA.getMembers()) {
+                if (!p.getOwnedHeroes().isEmpty()) {
+                    Hero picked = p.getOwnedHeroes().get(rand.nextInt(p.getOwnedHeroes().size()));
+                    record.addPick(p.getId(), picked.getId());
+                }
+            }
+            for (Player p : tB.getMembers()) {
+                if (!p.getOwnedHeroes().isEmpty()) {
+                    Hero picked = p.getOwnedHeroes().get(rand.nextInt(p.getOwnedHeroes().size()));
+                    record.addPick(p.getId(), picked.getId());
+                }
+            }
         }
         
         // Randomly bump player win rates and levels so they aren't all 0
-        java.util.Random rand = new java.util.Random();
         for (Player player : players) {
             player.setLevel(rand.nextInt(30) + 1); // Level 1 to 30
             player.setWinRate(rand.nextDouble() * 100); // 0.0 to 100.0

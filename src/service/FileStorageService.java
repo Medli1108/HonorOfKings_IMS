@@ -117,9 +117,12 @@ public class FileStorageService {
 
     private void saveMatchRecords(List<MatchRecord> records) {
         List<String> lines = new ArrayList<>();
-        lines.add("id,teamA_id,teamB_id,result,matchDate");
+        lines.add("id,teamA_id,teamB_id,result,matchDate,picks");
         for (MatchRecord r : records) {
-            lines.add(r.getId() + "," + r.getTeamA().getId() + "," + r.getTeamB().getId() + "," + r.getResult().name() + "," + r.getMatchDate().format(DATE_FORMATTER));
+            String picksStr = r.getPlayerHeroPicks().entrySet().stream()
+                .map(e -> e.getKey() + ":" + e.getValue())
+                .collect(Collectors.joining("|"));
+            lines.add(r.getId() + "," + r.getTeamA().getId() + "," + r.getTeamB().getId() + "," + r.getResult().name() + "," + r.getMatchDate().format(DATE_FORMATTER) + "," + picksStr);
         }
         writeLines(MATCH_RECORDS_FILE, lines);
     }
@@ -270,8 +273,18 @@ public class FileStorageService {
                 MatchResult result = MatchResult.valueOf(parts[3]);
                 LocalDateTime date = LocalDateTime.parse(parts[4], DATE_FORMATTER);
                 
+                Map<String, String> picks = new HashMap<>();
+                if (parts.length >= 6 && !parts[5].isEmpty()) {
+                    for (String pair : parts[5].split("\\|")) {
+                        String[] kv = pair.split(":");
+                        if (kv.length == 2) {
+                            picks.put(kv[0], kv[1]);
+                        }
+                    }
+                }
+                
                 if (teamA != null && teamB != null) {
-                    records.add(new MatchRecord(id, teamA, teamB, result, date));
+                    records.add(new MatchRecord(id, teamA, teamB, result, date, picks));
                 }
             }
         }

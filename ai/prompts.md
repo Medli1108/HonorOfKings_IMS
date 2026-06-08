@@ -13,6 +13,7 @@ The AI successfully identified spelling mistakes (e.g., "Anaylasis", "comcepts",
 ### My Decision
 Accepted all typo and grammar corrections. I applied these changes manually to the `plan.md` document to ensure it reads professionally before finalizing the planning stage commit.
 
+
 ## Prompt 02
 Time: 2026-06-04 08:05
 Tool/Model: Gemini Pro
@@ -28,13 +29,14 @@ The AI utilized the automated edit feature via the Continue extension to directl
 ### My Decision
 Accepted the automated file rewrite. Verified that all seven structural corrections were perfectly integrated into the local workspace before committing the code.
 
+
 ## Prompt 03
 Time: 2026-06-05 01:40
 Tool/Model: Gemini Pro
 Agent Role: Architect Agent
 Related Commit: ae7699d
 
-## My Prompt
+### My Prompt
 Act as an architect, within src directory, please build the framework according to the following requirements:
 src/
 Main.java
@@ -56,14 +58,15 @@ util/
 InputHelper.java
 DataInitializer.java
 
-## AI Response Summary
+### AI Response Summary
 The AI successfully generated the requested project directory layout and established the basic Java source files. Key actions included:
 Arranging files across the root, model, service, and util packages exactly as outlined.
 Correctly inserting appropriate package headers (package model;, package service;, package util;) for all sub-directory classes.
 Establishing fundamental class relationships, specifically setting up inheritance so that Player and Admin extend the base Person class.
 
-## My Decision
+### My Decision
 Accepted the framework modifications. The project structure was successfully updated in the local environment and prepared for manual commit generation.
+
 
 ## Prompt 04
 Time: 2026-06-05 02:43
@@ -88,6 +91,7 @@ The code is strictly the data initialization block as requested! Let me know if 
 
 ### My Decision
 I accepted the broad framework, but made a few manual tweaks to the dataset. I also found one AI's misunderstanding of the requirements regarding association.
+
 
 ## Prompt 05
 Time: 2026-06-05 09:54
@@ -149,6 +153,7 @@ Would you like me to hand this over to the Implementation Agent to apply these f
 ### My Decision
 After careful consideration, I accepted the proposed code review modifications. I refactored the codebase to leverage a structured `Role` enum instead of a primitive boolean value to safely distinguish between admin users and regular players, resolved the final constraint on file loading IDs (though that file I/O is kinda a stretch goal), and corrected the camelCase naming bugs.
 
+
 ## Prompt 06
 Time: 2026-06-05 10:58
 Tool/Model: Gemini Pro
@@ -191,6 +196,7 @@ I left `TODO` comments across these files. You can now pass this to the Implemen
 ### My Decision
 I accepted most of the structural blueprints, but I rejected the implementation of the `EquipmentType` enum. Adding explicit category types for equipment would introduce unnecessary complexity into the system at this stage.
 
+
 ## Prompt 07
 Time: 2026-06-06 01:33
 Tool/Model: Gemini Pro
@@ -211,6 +217,7 @@ The AI reviewed the codebase against the `plan.md` requirements and flagged five
 ### My Decision
 Accepted the fixes for the logic errors, the new enums, and the implementation of the searchable interface. Declined the suggestion regarding data instantiation fields in `DataInitializer.java`, as this lifecycle management will be handled separately in the game data management file.
 
+
 ## Prompt 08
 Time: 2026-06-06 02:23
 Tool/Model: Gemini Pro
@@ -230,6 +237,7 @@ The AI agreed with the structural decision to centralize data lifecycle manageme
 ### My Decision
 Rejected this draft. The proposed framework bundles too many responsibilities together; the search functionality needs to be decoupled into a separate service, and the overall boilerplate framework requires further fine-tuning.
 
+
 ## Prompt 09
 Time: 2026-06-06 02:50
 Tool/Model: Gemini Pro
@@ -248,6 +256,7 @@ The AI refactored the architecture by splitting data management and search logic
 ### My Decision
 Accepted the changes. The separation of concerns between data storage and search services is much cleaner. The infrastructure is ready for further fine-tuning.
 
+
 ## Prompt 10
 Time: 2026-06-07 14:26
 Tool/Model: Gemini Pro
@@ -262,6 +271,7 @@ The AI implemented a comprehensive CSV-based File I/O solution for data persiste
 
 ### My Decision
 Accepted the implementation. Because Java File I/O is a completely new topic for me, I am trusting the AI's generated architecture for the time being. I will proceed by reviewing the code line-by-line to study how the underlying streams and parsing work, followed by rigorous manual testing to verify that data is correctly preserved across sessions.
+
 
 ## Prompt 11
 Time: 2026-06-08 13:51
@@ -319,6 +329,7 @@ The AI reiterated previous high-level architectural warnings and provided an act
 
 ### My Decision
 Accepted the suggestions. I will integrate these five code adjustments into the codebase to stabilize the backend architecture before proceeding.
+P.S. The first suggestion was actually wrong which I realized later and that caused a crash, so I changed it back later.
 
 ## Prompt 14
 Time: 2026-06-08 19:10
@@ -337,7 +348,7 @@ The AI identified and resolved several critical runtime data integrity and synch
 * **Null Object Danger (`DataInitializer.java`)**: Fixed a bug where mock heroes were initialized with a `null` value for their `HeroType` by introducing logic to randomly assign a valid `HeroType` during data initialization.
 
 ### My Decision
-Accepted the changes to increase system robustness and prevent concurrent modification exceptions during runtime execution.
+Accepted the changes to increase system robustness and prevent concurrent modification exceptions during runtime execution. I also reversed the aforementioned mistake made by AI.
 
 ## Prompt 15
 Time: 2026-06-08 19:32
@@ -357,3 +368,26 @@ The AI verified that the object-oriented foundation is sound but identified two 
 
 ### My Decision
 Accepted the changes. I will implement the recommended setter modifications and loop synchronization guards across the service classes to guarantee comprehensive thread safety before initiating frontend development.
+
+## Prompt 16
+Time: 2026-06-08 20:20
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer
+Related Commit: 793cf83
+
+### My Prompt
+Act as an AI reviewer, in SearchService, AuthenticationService and GameDataManager, I think wrapping loops with synchronized (dataManager.getPlayers()) to prevent thread crashes is fine, but can we add a synchronized getter for the raw list in the manager instead? Like can I write something like public List<Player> getPlayers() { synchronized (players) { return new ArrayList<>(players); } } and delete the synchronized blocks added previously? This seems like a better approach. @AuthenticationService.java @SearchService.java @GameDataManager.java
+
+### AI Response Summary
+The AI strongly endorsed the defensive copying (snapshot) approach for managing concurrent list access, identifying three primary architectural advantages:
+1. **Safety**: Instantiating a private array copy (`new ArrayList<>(list)`) within the getter safely prevents `ConcurrentModificationException` errors during external downstream iteration.
+2. **Performance**: Threads no longer hold mutual exclusion locks over the shared global data collections while running prolonged search loops, eliminating concurrency bottlenecks.
+3. **Maintainability**: Completely removes tracking overhead and redundant `synchronized(...)` boilerplate loops out of the separate service layers.
+
+The AI provided the refactored encapsulated collection getters for `GameDataManager.java` and clean, decoupled search and lookup loops for `AuthenticationService.java` and `SearchService.java`.
+
+### My Decision
+Accepted the changes. The AI executed the defensive copying architecture perfectly, streamlining code readability across our services while maintaining bulletproof thread safety.
+
+
+

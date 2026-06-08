@@ -43,16 +43,6 @@ public class Team implements Searchable {
         return (double) wins / totalMatches;
     }
 
-    public Player getTopPlayer() {
-        if (members == null || members.isEmpty()) return null;
-        Player topPlayer = members.get(0);
-        for (Player player : members) {
-            if (player.getLevel() > topPlayer.getLevel()) {
-                topPlayer = player;
-            }
-        }
-        return topPlayer;
-    }
     // File I/O constructor
     public Team(String id, String name, List<Player> members, int totalMatches, int wins) {
         this.id = id;

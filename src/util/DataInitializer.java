@@ -72,6 +72,9 @@ public class DataInitializer {
 
             hero.addCompatibleEquipment(equipments.get(0));
             hero.addCompatibleEquipment(equipments.get(1));
+            hero.addCompatibleEquipment(equipments.get(2));
+
+            hero.addRecommendedEquipment(equipments.get(0));
         }
         // 4. Initialize 3 Teams with 5 players each
         Team team1 = new Team("Team Earth Pony", players.subList(0, 5));

@@ -79,6 +79,24 @@ private GameDataManager() {
         }
     }
 
+    public void addMatchRecord(MatchRecord record) {
+        if (record != null) {
+            matchRecords.add(record);
+
+            Team teamA = record.getTeamA();
+            Team teamB = record.getTeamB();
+            
+            if (teamA != null) teamA.setTotalMatches(teamA.getTotalMatches() + 1);
+            if (teamB != null) teamB.setTotalMatches(teamB.getTotalMatches() + 1);
+
+            if (record.getResult() == MatchResult.TEAM_A_WIN && teamA != null) {
+                teamA.setWins(teamA.getWins() + 1);
+            } else if (record.getResult() == MatchResult.TEAM_B_WIN && teamB != null) {
+                teamB.setWins(teamB.getWins() + 1);
+            }
+        }
+    }
+
     public boolean removePlayer(String playerId) {
         boolean removed = players.removeIf(p -> p.getId().equals(playerId));
         if (removed) {
@@ -141,6 +159,45 @@ private GameDataManager() {
             }
         }
         return removed;
+    }
+
+    public boolean removeMatchRecord(String recordId) {
+        MatchRecord targetRecord = null;
+        
+        synchronized (matchRecords) {
+            for (MatchRecord m : matchRecords) {
+                if (m.getId().equals(recordId)) {
+                    targetRecord = m;
+                    break;
+                }
+            }
+            if (targetRecord != null) {
+                matchRecords.remove(targetRecord);
+            }
+        }
+
+        if (targetRecord != null) {
+            Team teamA = targetRecord.getTeamA();
+            Team teamB = targetRecord.getTeamB();
+
+            synchronized (teams) {
+                if (teamA != null && teams.contains(teamA)) {
+                    teamA.setTotalMatches(Math.max(0, teamA.getTotalMatches() - 1));
+                    if (targetRecord.getResult() == MatchResult.TEAM_A_WIN) {
+                        teamA.setWins(Math.max(0, teamA.getWins() - 1));
+                    }
+                }
+                if (teamB != null && teams.contains(teamB)) {
+                    teamB.setTotalMatches(Math.max(0, teamB.getTotalMatches() - 1));
+                    if (targetRecord.getResult() == MatchResult.TEAM_B_WIN) {
+                        teamB.setWins(Math.max(0, teamB.getWins() - 1));
+                    }
+                }
+            }
+            return true;
+        }
+        
+        return false;
     }
 
     public void updatePlayer(Player updatedPlayer) {

@@ -365,10 +365,7 @@ private GameDataManager() {
                 if (existingPlayer.getId().equals(updatedPlayer.getId())) {
                     // Update properties while keeping the exact same memory reference
                     existingPlayer.setName(updatedPlayer.getName());
-                    existingPlayer.setWinRate(updatedPlayer.getWinRate());
                     existingPlayer.setLevel(updatedPlayer.getLevel());
-                    existingPlayer.setTotalMatches(updatedPlayer.getTotalMatches());
-                    existingPlayer.setWins(updatedPlayer.getWins());
                     // The existingPlayer's ownTeam and ownedHeroes references stay intact
                     return;
                 }
@@ -398,10 +395,7 @@ private GameDataManager() {
             for (Equipment existingEquipment : equipmentList) {
                 if (existingEquipment.getId().equals(updatedEquipment.getId())) {
                     existingEquipment.setName(updatedEquipment.getName());
-                    existingEquipment.setUsageCount(updatedEquipment.getUsageCount());
-                    existingEquipment.setWinRate(updatedEquipment.getWinRate());
                     existingEquipment.setAverageRating(updatedEquipment.getAverageRating());
-                    existingEquipment.setWins(updatedEquipment.getWins());
                     return;
                 }
             }
@@ -413,8 +407,6 @@ private GameDataManager() {
             for (Team existingTeam : teams) {
                 if (existingTeam.getId().equals(updatedTeam.getId())) {
                     existingTeam.setName(updatedTeam.getName());
-                    existingTeam.setTotalMatches(updatedTeam.getTotalMatches());
-                    existingTeam.setWins(updatedTeam.getWins());
                     // We don't overwrite members list directly to prevent ghost reference bugs
                     return;
                 }

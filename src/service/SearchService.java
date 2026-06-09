@@ -60,6 +60,18 @@ public class SearchService {
         return null;
     }
 
+    public MatchRecord findMatchRecordById(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return null;
+        }
+        for (MatchRecord record: dataManager.getMatchRecords()) {
+            if (record.getId().equalsIgnoreCase(query)) {
+                return record;
+            }
+        }
+        return null;
+    }
+
     public List<MatchRecord> getMatchHistoryForPlayer(String playerId, int limit) {
         List<MatchRecord> history = new ArrayList<>();
         Player player = findPlayerByIdOrName(playerId);

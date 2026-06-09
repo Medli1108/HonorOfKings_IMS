@@ -115,6 +115,21 @@ public class ConsolePrinter {
         System.out.println("====================");
     }
 
+    public static void printEquipmentDetails(Equipment eq) {
+        if (eq == null) {
+            System.out.println("Equipment not found.");
+            return;
+        }
+        System.out.println("\n=== Equipment Details ===");
+        System.out.println("ID: " + eq.getId());
+        System.out.println("Name: " + eq.getName());
+        System.out.println("Usage Count: " + eq.getUsageCount());
+        System.out.println("Wins: " + eq.getWins());
+        System.out.printf("Win Rate: %.2f%%\n", eq.getWinRate() * 100);
+        System.out.printf("Average Rating: %.1f / 5.0\n", eq.getAverageRating());
+        System.out.println("=========================");
+    }
+
     public static void printEquipmentRanking() {
         System.out.println("\n=== Equipment Statistics Ranking ===");
         System.out.println("Ranked by Win Rate (Descending), then Usage Count");
@@ -139,6 +154,7 @@ public class ConsolePrinter {
         } else {
             for (MatchRecord match : matches) {
                 System.out.println("Date: " + match.getMatchDate().format(DATE_FORMATTER));
+                System.out.println("ID: " + match.getId());
                 System.out.println("Matchup: " + match.getTeamA().getName() + " vs " + match.getTeamB().getName());
                 System.out.println("Result: " + match.getResult());
                 System.out.println("Picks:");
@@ -157,6 +173,42 @@ public class ConsolePrinter {
                 });
                 System.out.println("-------------------------");
             }
+        }
+        System.out.println("====================================");
+    }
+
+    public static void printRecentMatches(int n) {
+        List<MatchRecord> allMatches = dataManager.getMatchRecords();
+        System.out.println("\n=== Most Recent " + n + " Match Records ===");
+        if (allMatches == null || allMatches.isEmpty()) {
+            System.out.println("No match history found.");
+            System.out.println("====================================");
+            return;
+        }
+        
+        int count = 0;
+        for (int i = allMatches.size() - 1; i >= 0 && count < n; i--) {
+            MatchRecord match = allMatches.get(i);
+            System.out.println("Date: " + match.getMatchDate().format(DATE_FORMATTER));
+            System.out.println("Matchup: " + (match.getTeamA() != null ? match.getTeamA().getName() : "Unknown") + " vs " + 
+                                            (match.getTeamB() != null ? match.getTeamB().getName() : "Unknown"));
+            System.out.println("Result: " + match.getResult());
+            System.out.println("Picks:");
+            match.getPlayerHeroPicks().forEach((playerId, heroId) -> {
+                Player p = searchService.findPlayerByIdOrName(playerId);
+                
+                String heroName = "Unknown Hero";
+                for(Hero dmHero : dataManager.getHeroes()) {
+                    if(dmHero.getId().equals(heroId)) {
+                        heroName = dmHero.getName();
+                        break;
+                    }
+                }
+                
+                System.out.println("  - " + (p != null ? p.getName() : playerId) + " picked " + heroName);
+            });
+            System.out.println("-------------------------");
+            count++;
         }
         System.out.println("====================================");
     }

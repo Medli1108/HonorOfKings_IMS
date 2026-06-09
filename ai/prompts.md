@@ -412,7 +412,6 @@ The AI performed a comprehensive architectural readiness review of the backend b
 Adopted the suggestions. The overall backend architecture is verified as production-ready for the user interface. I will patch the three minor business-logic adjustments iteratively across my next few development commits before building out the frontend.
 
 
-
  ## Prompt 18
 Time: 2026-06-09 01:47
 Tool/Model: Gemini Pro
@@ -432,6 +431,7 @@ The AI verified the structural alignment by compiling the project, confirming ze
 ### My Decision
 Accepted these necessary modifications. Synchronizing the utility scripts and file storage mechanisms ensures the data persistence layer remains functional and seamlessly incorporates our recent model refactoring updates.
 
+
 ## Prompt 19
 Time: 2026-06-09 02:54
 Tool/Model: Gemini Pro
@@ -448,6 +448,7 @@ The AI confirmed that the backend's core coursework requirements, thread-safety 
 
 ### My Decision
 Accepted and applied the changes. Mutating the fields on the existing object references ensures that all multi-layered relationships—like teams and match histories—remain perfectly synchronized during live execution.
+
 
 ## Prompt 20
 Time: 2026-06-09 03:22
@@ -468,3 +469,26 @@ The AI concluded that once patched, the decoupled service architecture is fully 
 
 ### My Decision
 Accepted these changes. I will implement the mathematical metric rollback, apply localized thread guards to the roster collections, and refactor the double comparison logic to ensure perfect data integrity as I bridge the backend to the user interface.
+
+
+## Prompt 21
+Time: 2026-06-09 10:27
+Tool/Model: Gemini Pro
+Agent Role: AI Architect
+Related Commit: 760baab
+
+### My Prompt
+Act as an AI architect. Outline the framework of the main function within Main.java without building the entire application yet.
+
+### AI Response Summary
+The AI outlined a clean architectural blueprint for `Main.java`, structuring it as a decoupled "traffic controller" state machine divided into 5 execution phases:
+1. **Phase 1 (System Initialization)**: Triggers `FileStorageService` to load CSV data and falls back to `DataInitializer` if collections are blank.
+2. **Phase 2 (Application Lifecycle Loop)**: Maintains a master execution state loop (`systemRunning`) to keep the console app running continuously.
+3. **Phase 3 (Authentication State)**: Captures user input to authenticate identity via `AuthenticationService` or handles a clean system exit.
+4. **Phase 4 (Routing State)**: Dynamically checks user privilege roles (`ADMIN` vs. `PLAYER`) and securely dispatches them to their respective sub-menus.
+5. **Phase 5 (Shutdown State)**: Runs automatically when exiting the master loop to guarantee `FileStorageService.saveData()` flushes all pending in-memory state changes back to disk before termination.
+
+Additionally, the AI provided skeletons for two isolated helper loops—`runAdminMenu()` and `runPlayerMenu()`—leveraging switch statements to manage input-driven tasks seamlessly.
+
+### My Decision
+Accepted the framework. Isolating the menu routing logic and wrapping the system in a safe sequential lifecycle guarantees that user permission levels remain secure and file persistence is always reliably triggered on application shutdown.

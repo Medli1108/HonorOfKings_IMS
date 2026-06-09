@@ -492,3 +492,23 @@ Additionally, the AI provided skeletons for two isolated helper loops—`runAdmi
 
 ### My Decision
 Accepted the framework. Isolating the menu routing logic and wrapping the system in a safe sequential lifecycle guarantees that user permission levels remain secure and file persistence is always reliably triggered on application shutdown.
+
+## Prompt 22
+Time: 2026-06-09 18:20
+Tool/Model: Gemini Pro
+Agent Role: Implementation Agent
+Related Commit: 4c9e53c
+
+### My Prompt
+According to the plan, I have finished a few data editing features; please complete the remaining tasks for me in Main.java. (Now that I think about it, it would be better to move the lookup feature into a new class instead of cluttering the main method.)
+
+### AI Response Summary
+The AI decoupled the user interface rendering from the application routing by introducing a standalone printer component and implementing the player menu lifecycle:
+1. **Created `src/ui/ConsolePrinter.java`**: Established a dedicated UI helper class to centralize console formatting, grid layouts, and tabular data displays mandated by the project requirements.
+2. **Refactored `Main.java`**: Imported the new `ConsolePrinter` utility and completely fleshed out the `runPlayerMenu(Player player)` placeholder loop. 
+3. **Integrated Player UI Switch-Statement**: Implemented an input-driven loop connecting player choices directly to backend capabilities—enabling live testing for profile viewing, polymorphic entity searching, equipment statistics, match history lookups, and global leaderboards.
+
+The AI noted that the final step to complete the presentation layer involves wiring up the data modification and deletion prompts inside `runAdminMenu`.
+
+### My Decision
+Accepted the changes. Moving the console-printing rendering out of the master execution loops satisfies the separation of concerns principle, keeping `Main.java` concise and readable as we finalize the interface.

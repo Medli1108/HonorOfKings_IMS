@@ -41,7 +41,7 @@ public class Main {
         String answer = null;
         // --- PHASE 3: AUTHENTICATION STATE ---
         // 1. Display a welcome banner.
-        System.out.println("==========================\nWELCOME, EVERYPONY!\n==========================");
+        System.out.println("===================\nWELCOME, EVERYPONY!\n===================");
 
         while (systemRunning) {
             // 2. Ask the user to input their Name (or type "exit" to shut down).
@@ -87,7 +87,7 @@ public class Main {
         // committed to CSV.
         fileStorageService.saveData(dataManager);
         // 2. Print a graceful shutdown message (e.g., "System terminated. Goodbye!").
-        System.out.println("==========================\\nGOODBYE, EVERYPONY!\\n==========================");
+        System.out.println("===================\nGOODBYE, EVERYPONY!\n===================");
     }
 
     // ==========================================

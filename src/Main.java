@@ -19,6 +19,8 @@ import service.SearchService;
 import util.DataInitializer;
 import util.InputHelper;
 
+import ui.ConsolePrinter;
+
 public class Main {
     // 1. Instantiate shared services at the class level or inside main
     private static final GameDataManager dataManager = GameDataManager.getInstance();
@@ -41,11 +43,11 @@ public class Main {
         // --- PHASE 2: APPLICATION LIFECYCLE (The Master Loop) ---
         boolean systemRunning = true;
         String answer = null;
+        // --- PHASE 3: AUTHENTICATION STATE ---
+        // 1. Display a welcome banner.
+        System.out.println("==========================\nWELCOME, EVERYPONY!\n==========================");
         
         while (systemRunning) {
-            // --- PHASE 3: AUTHENTICATION STATE ---
-            // 1. Display a welcome banner.
-            System.out.println("==========================\nWELCOME, EVERYPONY!\n==========================");
             // 2. Ask the user to input their Name (or type "exit" to shut down).
             String name = InputHelper.getStringInput("Please enter your name, or type \"exit\" to shut down: ");
             // 3. If "exit", set systemRunning = false and break the loop.
@@ -67,9 +69,7 @@ public class Main {
             } else {
                 // If the Person object IS null:
                 //    Print "Invalid ID or Name. Please try again."
-                System.out.println("Hmmm, the system can't find your name, little pony. " +
-                "But fret not! You can re-enter your name or ask the princesses to help you create a new account" +
-                "if you don't have an existing account!");
+                System.out.println("Hmmm, the system can't find your name, little pony. But fret not! You can re-enter your name or ask the princesses to help you create a new account if you don't have an existing account!");
                 while (true) {
                     answer = InputHelper.getStringInput("Try again? (y/n)").toLowerCase();
                     if (answer.equals("y")) {
@@ -85,7 +85,9 @@ public class Main {
         }
         // --- PHASE 5: SHUTDOWN STATE ---
         // 1. Call FileStorageService.saveData() to ensure all final state changes are committed to CSV.
+        fileStorageService.saveData(dataManager);
         // 2. Print a graceful shutdown message (e.g., "System terminated. Goodbye!").
+        System.out.println("==========================\\nGOODBYE, EVERYPONY!\\n==========================");
     }
 
     // ==========================================
@@ -94,33 +96,104 @@ public class Main {
 
     private static void runAdminMenu(Admin admin) {
         boolean loggedIn = true;
+        System.out.println("Log in success!");
+        System.out.println("Hi, Princess " + admin.getName() + "! What's in your mind today?");
         while (loggedIn) {
+            int choice1 = -1;
+            int choice2 = -1;
             // 1. Print Admin Menu Options:
-            //    [1] Manage Players
-            //    [2] Manage Teams
-            //    [3] Manage Match Records
-            //    ...
-            //    [0] Logout
-            
-            // 2. Use a switch statement to handle InputHelper.getIntInput()
-            
-            // 3. If [0] is selected -> set loggedIn = false (returns to Authentication Phase)
+            choice1 = InputHelper.getIntInput("Please select: \n[1] Manage Players\n[2] Manage Teams\n[3] Manage Match Records\n[4] Manage Heroes\n[5] Manage Equipments\n[0] Logout");
+            switch (choice1) {
+                case 0:
+                    loggedIn = false;
+                    break;
+                case 1:
+                    choice2 = InputHelper.getIntInput("Please select: \n[1] Add a Player\n[2] Remove a Player\n[3] Update a Player\n[0] Return to Last Step");
+                    switch (choice2) {
+                        case 0:
+                            loggedIn = false;
+                            break;
+                        case 1:
+                            String playerToAdd = InputHelper.getStringInput("Please enter the name of the player you want to add: ");
+                            dataManager.addPlayer(new Player(playerToAdd));
+                        case 2:
+                            String playerToRemove = InputHelper.getStringInput("Please enter the name of the player you want to remove: ");
+                            dataManager.removePlayer(playerToRemove);
+                        case 3:
+                                                        String playerToUpdate = InputHelper.getStringInput("Please enter the name of the player you want to update: ");
+                            // Basic implementation to satisfy switch statement flow for now
+                            System.out.println("Update logic to be implemented fully.");
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 2:
+                    choice2 = InputHelper.getIntInput("Please select: \n[1] Add a Player\n[2] Remove a Player\n[3] Update a Player\n[0] Return to Last Step");
+                    break;
+                case 3:
+                    choice2 = InputHelper.getIntInput("Please select: \n[1] Add a Player\n[2] Remove a Player\n[3] Update a Player\n[0] Return to Last Step");
+                    break;
+                case 4:
+                    choice2 = InputHelper.getIntInput("Please select: \n[1] Add a Player\n[2] Remove a Player\n[3] Update a Player\n[0] Return to Last Step");
+                    break;
+                case 5:
+                    choice2 = InputHelper.getIntInput("Please select: \n[1] Add a Player\n[2] Remove a Player\n[3] Update a Player\n[0] Return to Last Step");
+                    break;
+                default:
+                    System.out.println("Please enter a valid input, Your Highness! ");
+                    break;
+            }
         }
     }
 
-    private static void runPlayerMenu(Player player) {
+        private static void runPlayerMenu(Player player) {
         boolean loggedIn = true;
         while (loggedIn) {
-            // 1. Print Player Menu Options:
-            //    [1] View My Profile & Edit Info
-            //    [2] Search Hero Details
-            //    [3] View Leaderboards
-            //    ...
-            //    [0] Logout
+            int choice = InputHelper.getIntInput("\n=== Player Menu ===\n" +
+                "[1] View My Profile\n" +
+                "[2] Search Player\n" +
+                "[3] Search Team Overview\n" +
+                "[4] Search Hero Details\n" +
+                "[5] View Equipment Statistics\n" +
+                "[6] View My Match History\n" +
+                "[7] View Player Leaderboard\n" +
+                "[0] Logout\n" +
+                "Please select: ");
             
-            // 2. Use a switch statement to route to specific view functions
-            
-            // 3. If [0] is selected -> set loggedIn = false (returns to Authentication Phase)
+            switch (choice) {
+                case 0:
+                    loggedIn = false;
+                    break;
+                case 1:
+                                        ConsolePrinter.printPlayerDetails(player);
+                    break;
+                case 2:
+                    String pQuery = InputHelper.getStringInput("Enter Player Name or ID: ");
+                    ConsolePrinter.printPlayerDetails(searchService.findPlayerByIdOrName(pQuery));
+                    break;
+                case 3:
+                    String tQuery = InputHelper.getStringInput("Enter Team Name or ID: ");
+                    ConsolePrinter.printTeamDetails(searchService.findTeamByIdOrName(tQuery));
+                    break;
+                case 4:
+                    String hQuery = InputHelper.getStringInput("Enter Hero Name: ");
+                    ConsolePrinter.printHeroDetails(searchService.findHeroByName(hQuery));
+                    break;
+                case 5:
+                    ConsolePrinter.printEquipmentRanking();
+                    break;
+                case 6:
+                    int limit = InputHelper.getIntInput("How many matches to show?: ");
+                    ConsolePrinter.printMatchHistory(searchService.getMatchHistoryForPlayer(player.getId(), limit), player.getName());
+                    break;
+                case 7:
+                    int topX = InputHelper.getIntInput("How many players to show in leaderboard?: ");
+                    ConsolePrinter.printPlayerLeaderboard(topX);
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
         }
     }
 }

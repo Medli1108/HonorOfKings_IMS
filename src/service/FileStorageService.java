@@ -129,7 +129,7 @@ public class FileStorageService {
     }
 
     // Load methods
-    public void loadData(GameDataManager dataManager) {
+    public boolean loadData(GameDataManager dataManager) {
         List<Admin> admins = loadAdmins();
         List<Equipment> equipments = loadEquipments();
         Map<String, Equipment> eqMap = equipments.stream().collect(Collectors.toMap(Equipment::getId, e -> e));
@@ -152,9 +152,11 @@ public class FileStorageService {
             dataManager.setPlayers(players);
             dataManager.setTeams(teams);
             dataManager.setMatchRecords(records);
-            System.out.println("Data loaded successfully from CSV files.");
+            System.out.println("Data loaded successfully from CSV files!");
+            return true;
         } else {
-            System.out.println("No existing data found. Starting fresh.");
+            System.out.println("No existing data found. Start initializing...");
+            return false;
         }
     }
 

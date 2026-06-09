@@ -36,13 +36,25 @@ public class SearchService {
         return null;
     }
 
-    public Hero findHeroByName(String name) {
-        if (name == null || name.trim().isEmpty()) {
+    public Hero findHeroByIdOrName(String query) {
+        if (query == null || query.trim().isEmpty()) {
             return null;
         }
         for (Hero hero : dataManager.getHeroes()) {
-            if (hero.getName().equalsIgnoreCase(name)) {
+            if (hero.getId().equalsIgnoreCase(query) || hero.getName().equalsIgnoreCase(query)) {
                 return hero;
+            }
+        }
+        return null;
+    }
+
+    public Equipment findEquipmentByIdOrName(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return null;
+        }
+        for (Equipment equipment : dataManager.getEquipmentList()) {
+            if (equipment.getId().equalsIgnoreCase(query) || equipment.getName().equalsIgnoreCase(query)) {
+                return equipment;
             }
         }
         return null;

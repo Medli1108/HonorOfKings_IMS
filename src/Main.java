@@ -120,7 +120,7 @@ public class Main {
                             String playerToRemove = InputHelper.getStringInput("Please enter the name of the player you want to remove: ");
                             dataManager.removePlayer(playerToRemove);
                         case 3:
-                                                        String playerToUpdate = InputHelper.getStringInput("Please enter the name of the player you want to update: ");
+                            String playerToUpdate = InputHelper.getStringInput("Please enter the name of the player you want to update: ");
                             // Basic implementation to satisfy switch statement flow for now
                             System.out.println("Update logic to be implemented fully.");
                             break;
@@ -166,7 +166,7 @@ public class Main {
                     loggedIn = false;
                     break;
                 case 1:
-                                        ConsolePrinter.printPlayerDetails(player);
+                    ConsolePrinter.printPlayerDetails(player);
                     break;
                 case 2:
                     String pQuery = InputHelper.getStringInput("Enter Player Name or ID: ");

@@ -549,4 +549,4 @@ The AI delivered a comprehensive evaluation split into three core categories:
 3. **Room for Improvement**: Identified a DRY (Don't Repeat Yourself) violation in `GameDataManager` featuring 40 lines of duplicated post-match mathematical calculations, noted a redundant database update execution path caused by Java's shallow-copy memory mutability, and recommended dynamically generating console options from the enum class using `Arrays.toString(HeroType.values())` to prevent hardcoded string smells.
 
 ### My Decision
-[Insert Decision - e.g., Accepted the feedback. I will extract the duplicate match-tracking math into a helper method, fix the "exit" name collision safety gap, and transition to dynamic enum arrays to clean up the user interface text.]
+Accepted the feedback. I will extract the duplicate match-tracking math into a helper method, fix the "exit" name collision safety gap, and transition to dynamic enum arrays to clean up the user interface text.

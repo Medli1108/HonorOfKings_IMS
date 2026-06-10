@@ -118,7 +118,7 @@ public class Main {
 
                                 case 1: {
                     choice2 = InputHelper.getIntInput(
-                            "What would you like to look up?\n[1] Players\n[2] Teams\n[3] Heroes\n[4] Equipments\n[5] Match Records\n[6] Player Leaderboard\n[7] Equipment Leaderboard\n[0] Return to Last Step");
+                            "What would you like to look up?\n[1] Players\n[2] Teams\n[3] Heroes\n[4] Equipments\n[5] Match Records\n[6] Player Leaderboard\n[7] Equipment Leaderboard\n[0] Return to Last Step\n>");
                     switch (choice2) {
                         case 1: {
                             String query = InputHelper.getStringInput("Please enter player name or ID: ");
@@ -504,7 +504,7 @@ public class Main {
         System.out.println("Hi, " + player.getName() + "! You are such a cute little pony~ What's in your mind today?");
         while (loggedIn) {
             choice = InputHelper.getIntInput(
-                    "\nPlease select: \n[1] View My Profile\n[2] Edit My Name\n[3] View Teams\n[4] View Heroes\n[5] View Global Match Records\n[6] View Own Match Records\n[7] View Leaderboards\n[0] Log out");
+                    "\nPlease select: \n[1] View My Profile\n[2] Edit My Name\n[3] View Teams\n[4] View Heroes\n[5] View Global Match Records\n[6] View Own Match Records\n[7] View Leaderboards\n[0] Log out\n>");
 
             switch (choice) {
                 case 0: {

@@ -43,27 +43,31 @@ public class Main {
         // 1. Display a welcome banner.
         System.out.println("===================\nWELCOME, EVERYPONY!\n===================");
 
-        while (systemRunning) {
+                while (systemRunning) {
             // 2. Ask the user to input their Name (or type "exit" to shut down).
             String name = InputHelper.getStringInput("Please enter your name, or type \"exit\" to shut down: ");
-            // 3. If "exit", set systemRunning = false and break the loop.
-            if (name.toLowerCase().equals("exit")) {
+            
+            // 4. Pass the input to AuthenticationService to get a Person object.
+            Person thisPerson = authService.authenticateUser(name);
+
+            // 3. If "exit" and auth failed, set systemRunning = false and break the loop.
+            if (thisPerson == null && name.equalsIgnoreCase("exit")) {
                 systemRunning = false;
                 break;
-                // 4. Pass the input to AuthenticationService to get a Person object.
             }
-            Person thisPerson = authService.authenticateUser(name);
 
             // --- PHASE 4: ROUTING STATE ---
             // If the Person object is NOT null:
             if (thisPerson != null) {
                 // Check their Role enum.
                 // If ADMIN -> runAdminMenu((Admin) person);
-                if (thisPerson instanceof Admin)
+                if (thisPerson instanceof Admin) {
                     runAdminMenu((Admin) thisPerson);
+                }
                 // If PLAYER -> runPlayerMenu((Player) person);
-                if (thisPerson instanceof Player)
+                else if (thisPerson instanceof Player) {
                     runPlayerMenu((Player) thisPerson);
+                }
             } else {
                 // If the Person object IS null:
                 // Print "Invalid ID or Name. Please try again."
@@ -204,9 +208,13 @@ public class Main {
         switch (choice2) {
             case 0:
                 break;
-            case 1: {
+                        case 1: {
                 String playerToAdd = InputHelper
                         .getStringInput("Please enter the name of the player you want to add: ");
+                if (playerToAdd.trim().isEmpty()) {
+                    System.out.println("Player name cannot be empty!");
+                    break;
+                }
                 dataManager.addPlayer(new Player(playerToAdd));
                 System.out.println("Player added successfully!");
                 break;
@@ -256,8 +264,12 @@ public class Main {
         switch (choice2) {
             case 0:
                 break;
-            case 1: {
+                        case 1: {
                 String teamName = InputHelper.getStringInput("Please enter the name of the new team: ");
+                if (teamName.trim().isEmpty()) {
+                    System.out.println("Team name cannot be empty!");
+                    break;
+                }
                 // Teams require a list of members. We start with an empty list.
                 dataManager.addTeam(new Team(teamName, new java.util.ArrayList<>()));
                 System.out.println("Team added successfully!");

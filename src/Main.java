@@ -1,3 +1,5 @@
+import java.util.List;
+
 import model.Admin;
 import model.Equipment;
 import model.Hero;
@@ -11,6 +13,7 @@ import model.Team;
 import service.AuthenticationService;
 import service.FileStorageService;
 import service.GameDataManager;
+import service.RecommendationService;
 import service.SearchService;
 
 import util.DataInitializer;
@@ -24,6 +27,7 @@ public class Main {
     private static final FileStorageService fileStorageService = new FileStorageService();
     private static final AuthenticationService authService = new AuthenticationService();
     private static final SearchService searchService = new SearchService();
+    private static final RecommendationService recommendationService = new RecommendationService();
 
     public static void main(String[] args) {
         // --- PHASE 1: SYSTEM INITIALIZATION ---
@@ -583,7 +587,7 @@ public class Main {
         System.out.println("Hi, " + player.getName() + "! You are such a cute little pony~ What's in your mind today?");
         while (loggedIn) {
             choice = InputHelper.getIntInput(
-                    "\nPlease select: \n[1] View My Profile\n[2] Edit My Name\n[3] View Teams\n[4] View Heroes\n[5] View Global Match Records\n[6] View Own Match Records\n[7] View Leaderboards\n[0] Log out\n>");
+                    "\nPlease select: \n[1] View My Profile\n[2] Edit My Name\n[3] View Teams\n[4] View Heroes\n[5] View Global Match Records\n[6] View Own Match Records\n[7] View Leaderboards\n[8] Equipment Recommendation\n[0] Log out\n>");
 
             switch (choice) {
                 case 0: {
@@ -622,15 +626,29 @@ public class Main {
                             .getIntInput("Please enter how many matches you would like to review: "));
                     break;
                 }
-                case 6:
+                case 6: {
                     int limit = InputHelper.getIntInput("How many matches to show?: ");
                     ConsolePrinter.printMatchHistory(searchService.getMatchHistoryForPlayer(player.getId(), limit),
                             player.getName());
                     break;
-                case 7:
+                }
+                case 7: {
                     int topX = InputHelper.getIntInput("How many players to show in leaderboard?: ");
                     ConsolePrinter.printPlayerLeaderboard(topX);
                     break;
+                }
+                case 8: {
+                    String query = InputHelper.getStringInput("Which hero do you want equipment recommendations for? (Enter name/ID): ");
+                    Hero hero = searchService.findHeroByIdOrName(query);
+                    if (hero != null) {
+                        int limit = InputHelper.getIntInput("How many items should we recommend?: ");
+                        List<Equipment> recommendations = recommendationService.recommendEquipment(player, hero, limit);
+                        ConsolePrinter.printRecommendations(hero, recommendations);
+                    } else {
+                        System.out.println("We couldn't find that hero in the database!");
+                    }
+                    break;
+                }
                 default:
                     System.out.println("Please enter a valid input, sugarcube! ");
             }

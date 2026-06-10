@@ -229,4 +229,18 @@ public class ConsolePrinter {
         }
         System.out.println("======================================");
     }
+
+    public static void printRecommendations(Hero hero, List<Equipment> recommendations) {
+        System.out.println("\n=== AI Equipment Recommendations for " + hero.getName() + " ===");
+        if (recommendations == null || recommendations.isEmpty()) {
+            System.out.println("No recommendations available at this time.");
+        } else {
+            for (int i = 0; i < recommendations.size(); i++) {
+                Equipment eq = recommendations.get(i);
+                System.out.printf("%2d. %-20s | Global Win Rate: %5.1f%% | Popularity: %d picks\n",
+                    (i + 1), eq.getName(), eq.getWinRate() * 100, eq.getUsageCount());
+            }
+        }
+        System.out.println("==================================================");
+    }
 }

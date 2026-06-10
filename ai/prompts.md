@@ -622,3 +622,22 @@ The AI successfully implemented the stretch goal by breaking the solution down i
 
 ### My Decision
 Manually applied these changes. Hand-coding the generated service and menu files allowed me to verify the combat logic formulas and ensure the inventory ownership checks match the structural architecture of the core backend.
+
+
+## Prompt 28
+Time: 2026-06-10 19:50
+Tool/Model: Gemini Pro
+Agent Role: AI Architect
+Related Commit: db549e7
+
+### My Prompt
+Act as an AI architect, I am going to design the GUI for my Main.java, please outline the framework for me in Main_GUI.java, you should not drop the functionalities in the original Main.java, simple as that. Please note that I am not asking you to make it console-like. @Main.java @Main_GUI.java
+
+### AI Response Summary
+The AI architect provided a complete user interface framework based on JavaFX, designed to map out all core terminal features into a modern graphical layout:
+* **Lifecycle State Handling**: Tethered system loading to the application `start()` method and attached file serialization (`saveData()`) directly to the primary stage's `setOnCloseRequest` event hook to guarantee graceful shutdowns.
+* **Scene and Stage Architecture**: Structured a single-stage state machine that swaps flat `Scene` configurations to transition users smoothly from a login window to role-specific views.
+* **Role-Based Tabbed Views**: Leveraged a decoupled `TabPane` element within both `showAdminDashboard` and `showPlayerDashboard` to map complex terminal sub-menus (management grids, personal profile editors, combat simulation modules) into clean, non-console layout blocks.
+
+### My Decision
+Rejected the JavaFX framework proposal. Because I am unfamiliar with JavaFX, I decided to reject this implementation and requested that the AI architect pivot to generating a GUI framework using Java Swing to match my skillset while preserving the backend's structural components.

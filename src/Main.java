@@ -44,17 +44,17 @@ public class Main {
         System.out.println("===================\nWELCOME, EVERYPONY!\n===================");
 
                 while (systemRunning) {
-            // 2. Ask the user to input their Name (or type "exit" to shut down).
-            String name = InputHelper.getStringInput("Please enter your name, or type \"exit\" to shut down: ");
+                    // 2. Ask the user to input their Name (or type "exit" to shut down).
+                    String name = InputHelper.getStringInput("Please enter your name, or type \"exit\" to shut down: ");
             
-            // 4. Pass the input to AuthenticationService to get a Person object.
-            Person thisPerson = authService.authenticateUser(name);
+                    // 3. If "exit", set systemRunning = false and break the loop immediately.
+                    if (name.equalsIgnoreCase("exit")) {
+                        systemRunning = false;
+                        break;
+                    }
 
-            // 3. If "exit" and auth failed, set systemRunning = false and break the loop.
-            if (thisPerson == null && name.equalsIgnoreCase("exit")) {
-                systemRunning = false;
-                break;
-            }
+                    // 4. Pass the input to AuthenticationService to get a Person object.
+                    Person thisPerson = authService.authenticateUser(name);
 
             // --- PHASE 4: ROUTING STATE ---
             // If the Person object is NOT null:
@@ -245,10 +245,34 @@ public class Main {
                         .getIntInput("Enter new level (current: " + playerToUpdate.getLevel() + "): ");
                 playerToUpdate.setLevel(newLevel);
 
-                String newName = InputHelper.getStringInput(
+                                String newName = InputHelper.getStringInput(
                         "Enter new name (or press enter to keep '" + playerToUpdate.getName() + "'): ");
                 if (!newName.isEmpty()) {
                     playerToUpdate.setName(newName);
+                }
+
+                String assignTeam = InputHelper.getStringInput(
+                        "Would you like to assign this player to a team? (y/n): ");
+                if (assignTeam.equalsIgnoreCase("y")) {
+                    String teamQuery = InputHelper.getStringInput("Please enter the ID or Name of the team: ");
+                    Team foundTeam = searchService.findTeamByIdOrName(teamQuery);
+                    if (foundTeam != null) {
+                        Team currentTeam = playerToUpdate.getOwnTeam();
+                        if (currentTeam != null && !currentTeam.getId().equals(foundTeam.getId())) {
+                            currentTeam.getMembers().remove(playerToUpdate);
+                        }
+                        if (currentTeam == null || !currentTeam.getId().equals(foundTeam.getId())) {
+                            if (!foundTeam.getMembers().contains(playerToUpdate)) {
+                                foundTeam.getMembers().add(playerToUpdate);
+                            }
+                            playerToUpdate.setOwnTeam(foundTeam);
+                            System.out.println("Assigned " + playerToUpdate.getName() + " to team " + foundTeam.getName() + "!");
+                        } else {
+                            System.out.println("Player is already in this team.");
+                        }
+                    } else {
+                        System.out.println("Team not found! Skipping team assignment.");
+                    }
                 }
 
                 dataManager.updatePlayer(playerToUpdate);
@@ -287,7 +311,7 @@ public class Main {
                 }
                 break;
             }
-            case 3: {
+                        case 3: {
                 String identifier = InputHelper
                         .getStringInput("Please enter the ID or Name of the team to update: ");
                 Team teamToUpdate = searchService.findTeamByIdOrName(identifier);
@@ -302,6 +326,31 @@ public class Main {
                         "Enter new name (or press enter to keep '" + teamToUpdate.getName() + "'): ");
                 if (!newName.isEmpty()) {
                     teamToUpdate.setName(newName);
+                }
+
+                String assignPlayer = InputHelper.getStringInput(
+                        "Would you like to assign an existing player to this team? (y/n): ");
+                if (assignPlayer.equalsIgnoreCase("y")) {
+                    String playerQuery = InputHelper.getStringInput("Please enter the ID or Name of the player: ");
+                    Player foundPlayer = searchService.findPlayerByIdOrName(playerQuery);
+                    if (foundPlayer != null) {
+                        Team currentTeam = foundPlayer.getOwnTeam();
+                        if (currentTeam != null && !currentTeam.getId().equals(teamToUpdate.getId())) {
+                            currentTeam.getMembers().remove(foundPlayer);
+                        }
+                        if (currentTeam == null || !currentTeam.getId().equals(teamToUpdate.getId())) {
+                            if (!teamToUpdate.getMembers().contains(foundPlayer)) {
+                                teamToUpdate.getMembers().add(foundPlayer);
+                            }
+                            foundPlayer.setOwnTeam(teamToUpdate);
+                            System.out.println("Assigned " + foundPlayer.getName() + " to team " + teamToUpdate.getName() + "!");
+                            dataManager.updatePlayer(foundPlayer);
+                        } else {
+                            System.out.println("Player is already in this team.");
+                        }
+                    } else {
+                        System.out.println("Player not found! Skipping player assignment.");
+                    }
                 }
 
                 dataManager.updateTeam(teamToUpdate);
@@ -327,11 +376,33 @@ public class Main {
                     break;
                 }
 
-                int res = InputHelper.getIntInput("Who won? [1] Team A  [2] Team B  [3] Draw : ");
+                                int res = InputHelper.getIntInput("Who won? [1] Team A  [2] Team B  [3] Draw : ");
                 MatchResult mr = (res == 1) ? MatchResult.TEAM_A_WIN
                         : (res == 2) ? MatchResult.TEAM_B_WIN : MatchResult.DRAW;
 
-                dataManager.addMatchRecord(new MatchRecord(teamA, teamB, mr));
+                MatchRecord record = new MatchRecord(teamA, teamB, mr);
+                
+                System.out.println("Please enter the hero ID or Name picked by each player:");
+                for (Player p : teamA.getMembers()) {
+                    String hQuery = InputHelper.getStringInput(p.getName() + " picked: ");
+                    Hero h = searchService.findHeroByIdOrName(hQuery);
+                    if (h != null) {
+                        record.addPick(p.getId(), h.getId());
+                    } else {
+                        System.out.println("Hero not found. Skipping pick for " + p.getName());
+                    }
+                }
+                for (Player p : teamB.getMembers()) {
+                    String hQuery = InputHelper.getStringInput(p.getName() + " picked: ");
+                    Hero h = searchService.findHeroByIdOrName(hQuery);
+                    if (h != null) {
+                        record.addPick(p.getId(), h.getId());
+                    } else {
+                        System.out.println("Hero not found. Skipping pick for " + p.getName());
+                    }
+                }
+
+                dataManager.addMatchRecord(record);
                 System.out.println("Match recorded successfully! Team statistics have been updated.");
                 break;
             }

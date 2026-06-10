@@ -155,7 +155,7 @@ public class ConsolePrinter {
             for (MatchRecord match : matches) {
                 System.out.println("Date: " + match.getMatchDate().format(DATE_FORMATTER));
                 System.out.println("ID: " + match.getId());
-                System.out.println("Matchup: " + match.getTeamA().getName() + " vs " + match.getTeamB().getName());
+                System.out.println("Matchup: " + (match.getTeamA() != null ? match.getTeamA().getName() : "[DELETED TEAM]") + " vs " + (match.getTeamB() != null ? match.getTeamB().getName() : "[DELETED TEAM]"));
                 System.out.println("Result: " + match.getResult());
                 System.out.println("Picks:");
                 match.getPlayerHeroPicks().forEach((playerId, heroId) -> {

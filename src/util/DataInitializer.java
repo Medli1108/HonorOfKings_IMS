@@ -152,16 +152,63 @@ public class DataInitializer {
             }
         }
         
-        // Randomly bump equipment stats
+        // Reset equipment stats to 0 before calculating from matches
         for (Equipment eq : equipments) {
-            eq.setUsageCount(rand.nextInt(500));
-            eq.setWins(rand.nextInt(eq.getUsageCount() + 1));
+            eq.setUsageCount(0);
+            eq.setWins(0);
+            eq.setWinRate(0.0);
+            eq.setAverageRating(1.0 + (4.0 * rand.nextDouble())); // Keep the random average rating
+        }
+
+        // Calculate actual equipment usage and win rates based on mock matches
+        for (MatchRecord record : matchRecords) {
+            boolean teamAWon = record.getResult() == MatchResult.TEAM_A_WIN;
+            boolean teamBWon = record.getResult() == MatchResult.TEAM_B_WIN;
+
+            // Process Team A
+            for (Player p : record.getTeamA().getMembers()) {
+                String pickedHeroId = record.getPlayerHeroPicks().get(p.getId());
+                if (pickedHeroId != null) {
+                    for (Hero h : p.getOwnedHeroes()) {
+                        if (h.getId().equals(pickedHeroId)) {
+                            for (Equipment eq : h.getCurrentEquipments()) {
+                                eq.setUsageCount(eq.getUsageCount() + 1);
+                                if (teamAWon) {
+                                    eq.setWins(eq.getWins() + 1);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Process Team B
+            for (Player p : record.getTeamB().getMembers()) {
+                String pickedHeroId = record.getPlayerHeroPicks().get(p.getId());
+                if (pickedHeroId != null) {
+                    for (Hero h : p.getOwnedHeroes()) {
+                        if (h.getId().equals(pickedHeroId)) {
+                            for (Equipment eq : h.getCurrentEquipments()) {
+                                eq.setUsageCount(eq.getUsageCount() + 1);
+                                if (teamBWon) {
+                                    eq.setWins(eq.getWins() + 1);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Finalize equipment win rates
+        for (Equipment eq : equipments) {
             if (eq.getUsageCount() > 0) {
                 eq.setWinRate((double) eq.getWins() / eq.getUsageCount());
             } else {
                 eq.setWinRate(0.0);
             }
-            eq.setAverageRating(1.0 + (4.0 * rand.nextDouble())); // 1.0 to 5.0
         }
 
         // 6. Initialize 4 Admins

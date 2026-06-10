@@ -1,0 +1,10 @@
+Twilight Sparkle
+3
+2
+Team Unicorn
+0
+Starlight Glimmer
+6
+1
+0
+exit

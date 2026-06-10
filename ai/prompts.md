@@ -585,3 +585,40 @@ The AI analyzed the failed test suites processed during the batched debugging se
 
 ### My Decision
 Accepted the fixes after performing independent manual verification. Utilizing an iterative, small-batch prompt strategy successfully prevented model timeouts and cleared the remaining test failures without introducing regression issues into the backend.
+
+
+## Prompt 27
+Time: 2026-06-10 16:15
+Tool/Model: Gemini Pro
+Agent Role: Implementation Agent
+Related Commit: e656cad
+
+### My Prompt
+I need to implement a "Combat Simulation" stretch goal. Please generate a new service class called CombatSimulatorService and show me the updates needed for my Main.java and ConsolePrinter.java files.
+
+Context:
+I have a Hero model with getBaseHp(), getBaseAttack(), and getCurrentEquipments() (which returns a List of Equipment).
+I have an Equipment model with getAverageRating().
+
+Requirements for CombatSimulatorService:
+1. Create a method simulateCombat(Hero playerHero, Hero opponentHero) that returns a List<String> representing the battle report line-by-line.
+2. Calculate "Effective HP" and "Effective ATK" for both heroes at the start.
+   * Effective HP = base HP + (Equipment Average Rating * 50 for each equipped item).
+   * Effective ATK = base ATK + (Equipment Average Rating * 5 for each equipped item).
+3. Implement a turn-based while loop until one hero's HP is 0 or less. Cap the battle at 50 turns to prevent infinite loops.
+4. Create a helper method executeAttack() to calculate damage for a single strike. It must include: A 15% chance to dodge (0 damage); A 20% chance to critically strike (1.5x damage); A random damage variance between 85% and 115% of the attacker's Effective ATK.
+5. Format the strings nicely with emojis like ⚔️ and 💥.
+
+Requirements for Main & ConsolePrinter:
+1. Give me the code to add a new "Combat Simulation" option to my main menu switch statement.
+2. The menu logic should ask the user for their hero (by ID or name) and verify they actually own it via player.getOwnedHeroes().contains(). Then ask for the opponent hero.
+3. Provide a simple printCombatReport(List<String> report) method for my ConsolePrinter class to iterate and print the battle log.
+
+### AI Response Summary
+The AI successfully implemented the stretch goal by breaking the solution down into three main components:
+* **`CombatSimulatorService.java`**: Generated a new service utilizing `java.util.Random` to manage turn-based fight sequences. It handled effective stat math multipliers, integrated a 50-turn circuit breaker to prevent infinite loops, and handled randomized strike evaluations (15% dodge checks, 20% crit scaling at 1.5x, and a rolling 85%–115% baseline damage variance).
+* **`Main.java`**: Supplied a new `case 9` routing menu loop. This handles terminal input collection via `InputHelper`, enforces a strict data ownership validation barrier using `.contains()`, and hooks into the lookup and simulator singletons.
+* **`ConsolePrinter.java`**: Created a clean list-traversal reporting method (`printCombatReport`) to systematically print out the formatted battle log and combat emojis to the standard console output.
+
+### My Decision
+Manually applied these changes. Hand-coding the generated service and menu files allowed me to verify the combat logic formulas and ensure the inventory ownership checks match the structural architecture of the core backend.

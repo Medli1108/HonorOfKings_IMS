@@ -183,3 +183,29 @@ User Input: "five" (String instead of Int)
 **Actual:** `ConsolePrinter.java` executes `match.getTeamB().getName()`. Because the team was purged, `getTeamB()` returns `null`, and calling `.getName()` on it triggers a fatal `NullPointerException`, crashing the application.
 **Result:** Fail
 **Bug Found:** Missing null-safety checks in the UI layer. `printMatchHistory` forgets the ternary operator safeguard entirely.
+
+## Test 26: Empty Name Bypass for Heroes and Equipment
+**Function Tested:** `InputHelper` Validation in `Main.java` (`manageHeroes()` and `manageEquipment()`)
+**Input:** Admin Menu -> Manage Heroes -> Add a Hero -> Name: "   " (Whitespace/Empty String)
+**Expected:** The system strips the whitespace, rejects the empty string, and alerts the admin to enter a valid name (mirroring the safe validation logic already implemented for adding a Player or Team).
+**Actual:** The system accepts the empty string without validation and creates a nameless hero, which disrupts console UI formatting layouts and creates an unsearchable entity.
+**Result:** Fail
+**Bug Found:** Missing `.trim().isEmpty()` validation check for the Hero and Equipment creation workflows in the UI layer.
+
+## Test 27: Unowned Hero Equipment Desync
+**Function Tested:** Match Record Pick Validation and `updateTeamPostMatch()`
+**Input:** Admin Menu -> Manage Match Records -> Add Match Record. When prompted for player picks, the Admin enters a valid Hero ID that exists in the database, but that the specific Player does *not* currently own in their personal inventory.
+**Expected:** The system should either reject the hero pick for that specific player, OR it should accept it and correctly update the equipment statistics (usage count, win rate) for the items associated with that hero.
+**Actual:** The UI accepts the hero pick and successfully logs it in the match record. However, the `GameDataManager` silently skips the equipment math because the nested loops in `updateTeamPostMatch()` only iterate through `player.getOwnedHeroes()`. The match is recorded, but the equipment statistics become permanently desynced from the actual play history.
+**Result:** Fail
+**Bug Found:** Data consistency bug between global match histories and local player inventories. There is no UI validation in `Main.java` to ensure a player actually owns a hero before logging it in a match pick.
+
+## Test 28: Team Transfer Match History Erasure
+**Function Tested:** `SearchService.getMatchHistoryForPlayer()`
+**Input:** 1. Player A plays 5 matches while assigned to "Team Earth Pony".
+2. The Admin goes to Manage Players -> Update Player, and transfers Player A to "Team Pegasus".
+3. Player A logs in and selects `[6] View Own Match Records`.
+**Expected:** The system displays the 5 match records Player A personally participated in while they were on Team Earth Pony.
+**Actual:** The system only returns matches involving Player A's *current* team ("Team Pegasus"). Player A's personal historical match logs completely vanish from their view, and they falsely "inherit" matches that Team Pegasus played before the player joined the roster.
+**Result:** Fail
+**Bug Found:** Logic flaw in `SearchService`. Instead of scanning the `MatchRecord.playerHeroPicks` map to verify if a player actually participated in a historical game, the search blindly queries match history using the player's active `getOwnTeam().getId()`.

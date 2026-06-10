@@ -465,7 +465,11 @@ public class Main {
             case 0:
                 break;
                         case 1: {
-                String name = InputHelper.getStringInput("Enter Hero Name: ");
+                                String name = InputHelper.getStringInput("Enter Hero Name: ");
+                if (name.trim().isEmpty()) {
+                    System.out.println("Hero name cannot be empty!");
+                    break;
+                }
                 String typeStr = InputHelper
                         .getStringInput("Enter Hero Type " + java.util.Arrays.toString(HeroType.values()) + ": ")
                         .toUpperCase();
@@ -526,8 +530,12 @@ public class Main {
         switch (choice2) {
             case 0:
                 break;
-            case 1: {
+                        case 1: {
                 String eqName = InputHelper.getStringInput("Enter the name of the new equipment: ");
+                if (eqName.trim().isEmpty()) {
+                    System.out.println("Equipment name cannot be empty!");
+                    break;
+                }
                 dataManager.addEquipment(new Equipment(eqName));
                 System.out.println("Equipment added successfully!");
                 break;

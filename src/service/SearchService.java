@@ -74,14 +74,20 @@ public class SearchService {
 
     public List<MatchRecord> getMatchHistoryForPlayer(String playerId, int limit) {
         List<MatchRecord> history = new ArrayList<>();
-        Player player = findPlayerByIdOrName(playerId);
-
-        if (player == null || player.getOwnTeam() == null) {
-            return history;
+        
+        // Loop backwards to get the most recent matches
+        List<MatchRecord> allMatches = dataManager.getMatchRecords();
+        for (int i = allMatches.size() - 1; i >= 0; i--) {
+            MatchRecord record = allMatches.get(i);
+            // Check if the player participated in this match, regardless of their current team.
+            if (record.getPlayerHeroPicks().containsKey(playerId)) {
+                history.add(record);
+                if (history.size() >= limit) {
+                    break;
+                }
+            }
         }
-
-        Team playerTeam = player.getOwnTeam();
-        return getMatchHistoryForTeam(playerTeam.getId(), limit);
+        return history;
     }
 
     public List<MatchRecord> getMatchHistoryForTeam(String teamId, int limit) {

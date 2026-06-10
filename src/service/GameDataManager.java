@@ -112,16 +112,25 @@ private GameDataManager() {
                 
                 String pickedHeroId = record.getPlayerHeroPicks().get(player.getId());
                 if (pickedHeroId != null) {
-                    for (Hero hero : player.getOwnedHeroes()) {
-                        if (hero.getId().equals(pickedHeroId)) {
-                            for (Equipment equipment : hero.getCurrentEquipments()) {
-                                equipment.setUsageCount(Math.max(0, equipment.getUsageCount() + matchDelta));
-                                if (isWinner) {
-                                    equipment.setWins(Math.max(0, equipment.getWins() + winDelta));
-                                }
-                                equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
+                    // Bug Fix: Search the global hero list, not just the player's owned heroes.
+                    // This prevents statistical de-sync if an admin assigns a hero pick for a hero the player doesn't own.
+                    Hero pickedHero = null;
+                    synchronized (heroes) {
+                        for (Hero hero : heroes) {
+                            if (hero.getId().equals(pickedHeroId)) {
+                                pickedHero = hero;
+                                break;
                             }
-                            break;
+                        }
+                    }
+
+                    if (pickedHero != null) {
+                        for (Equipment equipment : pickedHero.getCurrentEquipments()) {
+                            equipment.setUsageCount(Math.max(0, equipment.getUsageCount() + matchDelta));
+                            if (isWinner) {
+                                equipment.setWins(Math.max(0, equipment.getWins() + winDelta));
+                            }
+                            equipment.setWinRate(equipment.getUsageCount() > 0 ? (double)equipment.getWins() / equipment.getUsageCount() : 0.0);
                         }
                     }
                 }

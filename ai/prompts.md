@@ -641,3 +641,24 @@ The AI architect provided a complete user interface framework based on JavaFX, d
 
 ### My Decision
 Rejected the JavaFX framework proposal. Because I am unfamiliar with JavaFX, I decided to reject this implementation and requested that the AI architect pivot to generating a GUI framework using Java Swing to match my skillset while preserving the backend's structural components.
+
+
+## Prompt 29
+Time: 2026-06-10 20:15
+Tool/Model: Gemini Pro
+Agent Role: AI Architect
+Related Commit: 6429d75
+
+### My Prompt
+Please use Swing instead; the requirements remain the same as above.
+
+### AI Response Summary
+The AI accepted the architectural pivot and generated a robust, single-window presentation framework named `ApplicationShell.java` using the Java Swing toolkit, mapping the console requirements into graphical components:
+* **EDT Thread Bootstrap Validation**: Wrapped the main application entry execution point within `SwingUtilities.invokeLater()` to guarantee that window layout generation conforms strictly to Java's multi-threaded GUI drawing mandates.
+* **Stream Hijacking Logging Console**: Implemented a real-time terminal output interceptor. By redirecting `System.out` and `System.err` into a custom byte-array `OutputStream` that updates a scroll-bounded `JTextArea` via sequential `SwingUtilities.invokeLater()` pushes, the system safely renders backend logging outputs inside the visual view.
+* **Asynchronous Window Lifecycle Hooks**: Overrode window closure events with `DO_NOTHING_ON_CLOSE` and attached a custom `WindowAdapter`. This ensures that manual desktop exits gracefully trigger data flushes to CSV storage files before terminating the program, securing system data integrity.
+* **Role Routing via View Swapping**: Configured a persistent left-aligned control margin (`BorderLayout.WEST`) powered by a `CardLayout` state container, scaffolding hot-swappable UI state panels (`VIEW_LOGIN`, `VIEW_ADMIN`, `VIEW_PLAYER`) to easily isolate restricted menu panels.
+* **Scaffolded Controller Actions**: Established integer-action-coded administrative sub-controllers (`managePlayers`, `manageTeams`, etc.) designed to accept text-field arguments and delegate CRUD data modifications directly to the underlying service layers.
+
+### My Decision
+Accepted the Swing framework layout. Transitioning to a split-pane structural shell with real-time stream capturing allows me to preserve our text-heavy logging features and combat calculations inside a manageable, event-driven desktop layout.

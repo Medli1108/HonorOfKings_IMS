@@ -11,6 +11,7 @@ import model.Player;
 import model.Team;
 
 import service.AuthenticationService;
+import service.CombatSimulatorService;
 import service.FileStorageService;
 import service.GameDataManager;
 import service.RecommendationService;
@@ -28,6 +29,7 @@ public class Main {
     private static final AuthenticationService authService = new AuthenticationService();
     private static final SearchService searchService = new SearchService();
     private static final RecommendationService recommendationService = new RecommendationService();
+    private static final CombatSimulatorService combatSimulatorService = new CombatSimulatorService();
 
     public static void main(String[] args) {
         // --- PHASE 1: SYSTEM INITIALIZATION ---
@@ -47,18 +49,18 @@ public class Main {
         // 1. Display a welcome banner.
         System.out.println("===================\nWELCOME, EVERYPONY!\n===================");
 
-                while (systemRunning) {
-                    // 2. Ask the user to input their Name (or type "exit" to shut down).
-                    String name = InputHelper.getStringInput("Please enter your name, or type \"exit\" to shut down: ");
-            
-                    // 3. If "exit", set systemRunning = false and break the loop immediately.
-                    if (name.equalsIgnoreCase("exit")) {
-                        systemRunning = false;
-                        break;
-                    }
+        while (systemRunning) {
+            // 2. Ask the user to input their Name (or type "exit" to shut down).
+            String name = InputHelper.getStringInput("Please enter your name, or type \"exit\" to shut down: ");
 
-                    // 4. Pass the input to AuthenticationService to get a Person object.
-                    Person thisPerson = authService.authenticateUser(name);
+            // 3. If "exit", set systemRunning = false and break the loop immediately.
+            if (name.equalsIgnoreCase("exit")) {
+                systemRunning = false;
+                break;
+            }
+
+            // 4. Pass the input to AuthenticationService to get a Person object.
+            Person thisPerson = authService.authenticateUser(name);
 
             // --- PHASE 4: ROUTING STATE ---
             // If the Person object is NOT null:
@@ -120,7 +122,7 @@ public class Main {
                     break;
                 }
 
-                                case 1: {
+                case 1: {
                     choice2 = InputHelper.getIntInput(
                             "What would you like to look up?\n[1] Players\n[2] Teams\n[3] Heroes\n[4] Equipments\n[5] Match Records\n[6] Player Leaderboard\n[7] Equipment Leaderboard\n[0] Return to Last Step\n>");
                     switch (choice2) {
@@ -165,15 +167,15 @@ public class Main {
                     }
                     break;
                 }
-                                // ==========================================
+                // ==========================================
                 // CASE 2: MANAGE PLAYERS
                 // ==========================================
                 case 2:
                     managePlayers();
                     break;
-                    // ==========================================
-                    // CASE 3: MANAGE TEAMS
-                    // ==========================================
+                // ==========================================
+                // CASE 3: MANAGE TEAMS
+                // ==========================================
                 case 3:
                     manageTeams();
                     break;
@@ -212,7 +214,7 @@ public class Main {
         switch (choice2) {
             case 0:
                 break;
-                        case 1: {
+            case 1: {
                 String playerToAdd = InputHelper
                         .getStringInput("Please enter the name of the player you want to add: ");
                 if (playerToAdd.trim().isEmpty()) {
@@ -249,7 +251,7 @@ public class Main {
                         .getIntInput("Enter new level (current: " + playerToUpdate.getLevel() + "): ");
                 playerToUpdate.setLevel(newLevel);
 
-                                String newName = InputHelper.getStringInput(
+                String newName = InputHelper.getStringInput(
                         "Enter new name (or press enter to keep '" + playerToUpdate.getName() + "'): ");
                 if (!newName.isEmpty()) {
                     playerToUpdate.setName(newName);
@@ -270,7 +272,8 @@ public class Main {
                                 foundTeam.getMembers().add(playerToUpdate);
                             }
                             playerToUpdate.setOwnTeam(foundTeam);
-                            System.out.println("Assigned " + playerToUpdate.getName() + " to team " + foundTeam.getName() + "!");
+                            System.out.println(
+                                    "Assigned " + playerToUpdate.getName() + " to team " + foundTeam.getName() + "!");
                         } else {
                             System.out.println("Player is already in this team.");
                         }
@@ -292,7 +295,7 @@ public class Main {
         switch (choice2) {
             case 0:
                 break;
-                        case 1: {
+            case 1: {
                 String teamName = InputHelper.getStringInput("Please enter the name of the new team: ");
                 if (teamName.trim().isEmpty()) {
                     System.out.println("Team name cannot be empty!");
@@ -315,7 +318,7 @@ public class Main {
                 }
                 break;
             }
-                        case 3: {
+            case 3: {
                 String identifier = InputHelper
                         .getStringInput("Please enter the ID or Name of the team to update: ");
                 Team teamToUpdate = searchService.findTeamByIdOrName(identifier);
@@ -347,7 +350,8 @@ public class Main {
                                 teamToUpdate.getMembers().add(foundPlayer);
                             }
                             foundPlayer.setOwnTeam(teamToUpdate);
-                            System.out.println("Assigned " + foundPlayer.getName() + " to team " + teamToUpdate.getName() + "!");
+                            System.out.println(
+                                    "Assigned " + foundPlayer.getName() + " to team " + teamToUpdate.getName() + "!");
                             dataManager.updatePlayer(foundPlayer);
                         } else {
                             System.out.println("Player is already in this team.");
@@ -380,12 +384,12 @@ public class Main {
                     break;
                 }
 
-                                int res = InputHelper.getIntInput("Who won? [1] Team A  [2] Team B  [3] Draw : ");
+                int res = InputHelper.getIntInput("Who won? [1] Team A  [2] Team B  [3] Draw : ");
                 MatchResult mr = (res == 1) ? MatchResult.TEAM_A_WIN
                         : (res == 2) ? MatchResult.TEAM_B_WIN : MatchResult.DRAW;
 
                 MatchRecord record = new MatchRecord(teamA, teamB, mr);
-                
+
                 System.out.println("Please enter the hero ID or Name picked by each player:");
                 for (Player p : teamA.getMembers()) {
                     String hQuery = InputHelper.getStringInput(p.getName() + " picked: ");
@@ -468,8 +472,8 @@ public class Main {
         switch (choice2) {
             case 0:
                 break;
-                        case 1: {
-                                String name = InputHelper.getStringInput("Enter Hero Name: ");
+            case 1: {
+                String name = InputHelper.getStringInput("Enter Hero Name: ");
                 if (name.trim().isEmpty()) {
                     System.out.println("Hero name cannot be empty!");
                     break;
@@ -534,7 +538,7 @@ public class Main {
         switch (choice2) {
             case 0:
                 break;
-                        case 1: {
+            case 1: {
                 String eqName = InputHelper.getStringInput("Enter the name of the new equipment: ");
                 if (eqName.trim().isEmpty()) {
                     System.out.println("Equipment name cannot be empty!");
@@ -587,7 +591,7 @@ public class Main {
         System.out.println("Hi, " + player.getName() + "! You are such a cute little pony~ What's in your mind today?");
         while (loggedIn) {
             choice = InputHelper.getIntInput(
-                    "\nPlease select: \n[1] View My Profile\n[2] Edit My Name\n[3] View Teams\n[4] View Heroes\n[5] View Global Match Records\n[6] View Own Match Records\n[7] View Leaderboards\n[8] Equipment Recommendation\n[0] Log out\n>");
+                    "\nPlease select: \n[1] View My Profile\n[2] Edit My Name\n[3] View Teams\n[4] View Heroes\n[5] View Global Match Records\n[6] View Own Match Records\n[7] View Leaderboards\n[8] Equipment Recommendation\n[9] Combat Simulation\n[0] Log out\n>");
 
             switch (choice) {
                 case 0: {
@@ -638,7 +642,8 @@ public class Main {
                     break;
                 }
                 case 8: {
-                    String query = InputHelper.getStringInput("Which hero do you want equipment recommendations for? (Enter name/ID): ");
+                    String query = InputHelper
+                            .getStringInput("Which hero do you want equipment recommendations for? (Enter name/ID): ");
                     Hero hero = searchService.findHeroByIdOrName(query);
                     if (hero != null) {
                         int limit = InputHelper.getIntInput("How many items should we recommend?: ");
@@ -649,10 +654,38 @@ public class Main {
                     }
                     break;
                 }
+                case 9: {
+                    String myHeroQuery = InputHelper
+                            .getStringInput("Enter the name or ID of the hero you want to use from your inventory: ");
+                    Hero myHero = searchService.findHeroByIdOrName(myHeroQuery);
+
+                    if (myHero == null) {
+                        System.out.println("We couldn't find that hero in the database!");
+                        break;
+                    }
+
+                    // Ensure the player actually owns the hero before letting them fight with it
+                    if (!player.getOwnedHeroes().contains(myHero)) {
+                        System.out.println("You don't own this hero! Please select a hero from your inventory.");
+                        break;
+                    }
+
+                    String opponentHeroQuery = InputHelper
+                            .getStringInput("Enter the name or ID of the opponent hero you wish to challenge: ");
+                    Hero opponentHero = searchService.findHeroByIdOrName(opponentHeroQuery);
+
+                    if (opponentHero == null) {
+                        System.out.println("We couldn't find that opponent hero in the database!");
+                        break;
+                    }
+
+                    List<String> combatReport = combatSimulatorService.simulateCombat(myHero, opponentHero);
+                    ConsolePrinter.printCombatReport(combatReport);
+                    break;
+                }
                 default:
                     System.out.println("Please enter a valid input, sugarcube! ");
             }
         }
     }
 }
-

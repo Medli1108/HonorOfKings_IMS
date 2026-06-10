@@ -33,21 +33,21 @@ public class DataInitializer {
 
         // 2. Initialize 15 Heroes
         List<Hero> heroes = new ArrayList<>(List.of(
-                new Hero("Gerald", HeroType.WARRIOR, 3000, 15), 
-                new Hero("Magnus", HeroType.MAGE, 1200, 30), 
-                new Hero("Elora", HeroType.MAGE, 2400, 25),
-                new Hero("Alric", HeroType.WARRIOR, 2600, 18), 
-                new Hero("Dante", HeroType.ELF, 2000, 22), 
-                new Hero("Nivus", HeroType.MAGE, 1500,28),
-                new Hero("Eridan", HeroType.ELF, 2400, 22), 
-                new Hero("Phoenix", HeroType.DRAGON, 1000, 55), 
-                new Hero("Wilbur", HeroType.DRAGON, 3500, 30),
-                new Hero("Vez'nan", HeroType.MAGE, 1800, 24), 
-                new Hero("Asra", HeroType.ASSASSIN, 1400, 22), 
-                new Hero("Eiskalt", HeroType.DRAGON, 2800, 40),
-                new Hero("Boneheart", HeroType.DRAGON, 2600, 36), 
-                new Hero("Anya", HeroType.ELF, 2200, 20), 
-                new Hero("Nyru", HeroType.MAGE, 1300, 26)
+                new Hero("Gerald", HeroType.WARRIOR, 600, 15), 
+                new Hero("Magnus", HeroType.MAGE, 240, 30), 
+                new Hero("Elora", HeroType.MAGE, 480, 25),
+                new Hero("Alric", HeroType.WARRIOR, 520, 18), 
+                new Hero("Dante", HeroType.ELF, 400, 22), 
+                new Hero("Nivus", HeroType.MAGE, 300,28),
+                new Hero("Eridan", HeroType.ELF, 480, 22), 
+                new Hero("Phoenix", HeroType.DRAGON, 200, 55), 
+                new Hero("Wilbur", HeroType.DRAGON, 700, 30),
+                new Hero("Vez'nan", HeroType.MAGE, 360, 24), 
+                new Hero("Asra", HeroType.ASSASSIN, 280, 22), 
+                new Hero("Eiskalt", HeroType.DRAGON, 560, 40),
+                new Hero("Boneheart", HeroType.DRAGON, 520, 36), 
+                new Hero("Anya", HeroType.ELF, 440, 20), 
+                new Hero("Nyru", HeroType.MAGE, 260, 26)
             ));
 
         // 3. Initialize 15 Players (for 3 teams of 5)

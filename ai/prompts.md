@@ -512,3 +512,22 @@ The AI noted that the final step to complete the presentation layer involves wir
 
 ### My Decision
 Accepted the changes. Moving the console-printing rendering out of the master execution loops satisfies the separation of concerns principle, keeping `Main.java` concise and readable as we finalize the interface.
+
+
+## Prompt 23
+Time: 2026-06-10 2:20
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer and Tester
+Related Commit: 876a343
+
+### My Prompt
+Act as an AI reviewer and tester. In Main.java, are there any logic pitfalls and interface flaws?
+
+### AI Response Summary
+The AI evaluated `Main.java` and classified its findings into a critical execution bug, runtime logic gaps, and UI design code smells:
+* **Critical Logic Pitfall (Switch Fall-Through)**: Discovered that the outer `switch (choice1)` statement inside `runAdminMenu` completely lacked `break` statements across cases 1 through 6. This creates a cascade where selecting one management category forces the application to fall through and execute every subsequent entity menu sequentially, as the existing breaks only exited inner switch statements.
+* **Logic Pitfalls**: Identified potential `NullPointerException` (NPE) crashes if invalid lookup queries return a `null` entity that is passed blindly into `ConsolePrinter`. It also caught a missing data persistence vulnerability in `runPlayerMenu` case 2 where updating a player's name fails to call `dataManager.updatePlayer(player)` to commit the change to disk.
+* **Interface & Design Flaws**: Flagged a missing newline string format error in the admin menu, a "God Method" clean-code violation where `runAdminMenu` spans over 260 lines handling mixed routing logic, and inconsistent search architectures where certain components query raw manager list getters rather than using `SearchService` uniformly.
+
+### My Decision
+Accepted the findings. I will add the missing switch breaks to resolve the menu fall-through bug, establish null-safety check parameters around search queries, integrate the player name saving lifecycle update, and eventually refactor the bloated admin menu into distinct helper methods to improve maintainability.

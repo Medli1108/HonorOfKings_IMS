@@ -1,3 +1,5 @@
+# Test
+
 ## Test 01: Admin Authentication Login
 **Function Tested:** Authentication Service Routing
 **Input:** Login name: "Twilight Sparkle"
@@ -257,4 +259,20 @@ User Input: "five" (String instead of Int)
 **Input:** Player Menu -> [5] View Global Match Records -> Prompt: "How many matches you would like to review?": 50 (when only 10 exist).
 **Expected:** The system prints all 10 available matches in reverse chronological order and safely terminates the loop without throwing an `IndexOutOfBoundsException`.
 **Actual:** The loop boundary condition `i >= 0 && count < n` successfully prevented the crash and displayed the entire available dataset.
+**Result:** Pass
+
+## Test 36 (Final Test): End-to-End GUI Integration & Window Lifecycle Hook
+**Function Tested:** `Main_With_GUI.java` (View Routing, Stream Interception, and Safe Shutdown)
+**Input:** 1. Boot the application. At the Login Panel, enter Admin name: "Celestia".
+2. Admin Panel -> Click "Add a Hero". Enter via `JOptionPane` pop-ups: Name "Sunburst", Type "MAGE", HP "300", ATK "25".
+3. Click the red "[0] Logout" button.
+4. Back at the Login Panel, enter Player name: "Starlight Glimmer". 
+5. Player Panel -> Click "[4] View Heroes" -> Search "Sunburst".
+6. Click the desktop window's native 'X' close button to exit the application entirely.
+7. Reboot the application and log in as any player to search for "Sunburst" again.
+**Expected:** 1. The `JTextArea` captures and displays all backend terminal outputs (like the combat simulation banners and login success messages) seamlessly via `SwingUtilities.invokeLater`.
+2. The UI smoothly transitions between the Login, Admin, and Player panels without retaining ghost inputs in the text fields.
+3. The `JOptionPane` successfully parses the integer and string inputs without throwing a `NumberFormatException`, successfully committing the new hero to memory.
+4. Clicking the 'X' button overrides the default forced termination, executes `FileStorageService.saveData()`, and successfully serializes "Sunburst" into `heroes.csv` before the JVM shuts down.
+**Actual:** The GUI routed states correctly, text streams rendered perfectly in the display area without threading crashes, and reopening the app confirmed that the custom `WindowAdapter` successfully flushed the in-memory data to the CSV files before closing.
 **Result:** Pass

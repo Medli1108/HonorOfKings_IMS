@@ -588,7 +588,7 @@ public class Main {
         boolean loggedIn = true;
         int choice = -1;
         System.out.println("Log in success!");
-        System.out.println("Hi, " + player.getName() + "! You are such a cute little pony~ What's in your mind today?");
+        System.out.println("Hi, " + player.getName() + "! You are such a cute little pony~ What's on your mind today?");
         while (loggedIn) {
             choice = InputHelper.getIntInput(
                     "\nPlease select: \n[1] View My Profile\n[2] Edit My Name\n[3] View Teams\n[4] View Heroes\n[5] View Global Match Records\n[6] View Own Match Records\n[7] View Leaderboards\n[8] Equipment Recommendation\n[9] Combat Simulation\n[0] Log out\n>");

@@ -393,10 +393,10 @@ public class Main {
         switch (choice2) {
             case 0:
                 break;
-            case 1: {
+                        case 1: {
                 String name = InputHelper.getStringInput("Enter Hero Name: ");
                 String typeStr = InputHelper
-                        .getStringInput("Enter Hero Type (WARRIOR, ASSASSIN, MAGE, DRAGON, ELF): ")
+                        .getStringInput("Enter Hero Type " + java.util.Arrays.toString(HeroType.values()) + ": ")
                         .toUpperCase();
                 try {
                     HeroType type = HeroType.valueOf(typeStr);

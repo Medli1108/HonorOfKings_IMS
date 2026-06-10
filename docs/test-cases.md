@@ -140,3 +140,46 @@ User Input: "five" (String instead of Int)
 **Expected:** The system rolls back the old wins/losses, applies the new result, and preserves the original hero picks map.
 **Actual:** The `tempUpdatedRecord` successfully cloned the `HashMap` of hero picks, ensuring that when the record was removed and re-added to calculate the new result, the granular player-hero statistics were not lost.
 **Result:** Pass
+
+## Test 21: The "Exit" Identity Lockout
+**Function Tested:** Authentication Loop and System Shutdown (`Main.java`)
+**Input:** 1. Admin Menu -> Add a Player -> Name: "exit"
+2. Log out. 
+3. Login prompt -> enter: "exit"
+**Expected:** The system bypasses the player login and gracefully shuts down the application as intended by the shutdown keyword.
+**Actual:** Because the `AuthenticationService` successfully finds a player named "exit", `thisPerson` is not null. The shutdown condition `if (thisPerson == null && name.equalsIgnoreCase("exit"))` evaluates to false. The system logs the user in as the player "exit" instead of shutting down.
+**Result:** Fail
+**Bug Found:** Logic flaw in authentication prioritization. A user maliciously or accidentally named "exit" effectively traps everyone in the system, disabling the ability to trigger the Phase 5 shutdown sequence.
+
+## Test 22: The Empty Team Roster Trap
+**Function Tested:** Admin Data Management (`manageTeams` and `managePlayers` in `Main.java`)
+**Input:** 1. Admin Menu -> Manage Teams -> Add a Team ("Team Wonderbolts"). 
+2. Admin Menu -> Manage Players -> Update a Player -> Name: "Spitfire". Attempt to assign Spitfire to "Team Wonderbolts".
+**Expected:** The Admin interface prompts the user to select a team to assign the player to, successfully linking the `Player` object to the `Team` object.
+**Actual:** `manageTeams()` creates a team with an empty `ArrayList`. `managePlayers()` only prompts the Admin to update "Level" and "Name". There is zero UI code in `Main.java` allowing an Admin to link a player to a team.
+**Result:** Fail
+**Bug Found:** Missing UI business logic. Any newly created team will permanently have 0 members, and a newly created player can never join a team without directly editing the `.csv` file.
+
+## Test 23: The "Ghost Match" Missing Prompts (Unresolved)
+**Function Tested:** `manageMatchRecords()` - Match Creation
+**Input:** Admin Menu -> Manage Match Records -> Add a Match Record (Team Earth Pony vs Team Pegasus).
+**Expected:** After the Admin records the teams and the winner, the console loops through the 10 participating players and prompts the Admin to input which `Hero` each player picked, so the `HashMap` can be passed to the backend.
+**Actual:** `Main.java` instantiates `new MatchRecord(teamA, teamB, mr)` which defaults to an empty `playerHeroPicks` HashMap. The UI immediately prints "Match recorded successfully!" and returns to the menu. 
+**Result:** Fail
+**Bug Found:** Because the UI never asks for the hero picks, the backend delta-math (`updateTeamPostMatch`) has no hero IDs to look up, meaning `Equipment` win rates and usage counts will permanently stagnate for all manually added matches.
+
+## Test 24: Mock Data Statistical De-sync
+**Function Tested:** `DataInitializer.java` Data Integrity
+**Input:** Boot the system for the very first time (triggering `DataInitializer`). Go to `[1] View information -> [7] Equipment Leaderboard`. Pick an equipment item and note its usage count and win rate. Then, manually tally how many times that item actually appears in the 10 generated Match Records.
+**Expected:** The Equipment's `usageCount` and `wins` should perfectly match the mathematical reality of the mock matches it participated in.
+**Actual:** `DataInitializer` calculates Team and Player stats via an accurate simulation loop, but at the very end of the file, it completely fakes Equipment stats using `rand.nextInt(500)`. 
+**Result:** Fail
+**Bug Found:** Mock data integrity breach. The initialized equipment statistics are artificially inflated and completely divorced from the actual generated match histories.
+
+## Test 25: Unsafe Null Printing in Match History
+**Function Tested:** `ConsolePrinter.printMatchHistory()`
+**Input:** Admin Menu -> Manage Teams -> Remove Team ("Team Unicorn"). Then, go to Player Menu -> View Own Match Records (for a player who previously played against Team Unicorn). 
+**Expected:** The system prints the match history, safely handling the fact that the opposing team no longer exists in the database.
+**Actual:** `ConsolePrinter.java` executes `match.getTeamB().getName()`. Because the team was purged, `getTeamB()` returns `null`, and calling `.getName()` on it triggers a fatal `NullPointerException`, crashing the application.
+**Result:** Fail
+**Bug Found:** Missing null-safety checks in the UI layer. `printMatchHistory` forgets the ternary operator safeguard entirely.

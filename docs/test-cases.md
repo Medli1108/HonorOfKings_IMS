@@ -209,3 +209,52 @@ User Input: "five" (String instead of Int)
 **Actual:** The system only returns matches involving Player A's *current* team ("Team Pegasus"). Player A's personal historical match logs completely vanish from their view, and they falsely "inherit" matches that Team Pegasus played before the player joined the roster.
 **Result:** Fail
 **Bug Found:** Logic flaw in `SearchService`. Instead of scanning the `MatchRecord.playerHeroPicks` map to verify if a player actually participated in a historical game, the search blindly queries match history using the player's active `getOwnTeam().getId()`.
+
+## Test 29: Data Persistence - Safe Shutdown Saving
+**Function Tested:** Phase 5 System Shutdown (`FileStorageService.saveData`)
+**Input:** Admin logs in -> Adds new equipment named "Alicorn Amulet" -> Logs out -> Types "exit" at the login prompt.
+**Expected:** The system triggers Phase 5, iterates through all `GameDataManager` collections, and writes the in-memory data to the CSV files before the JVM terminates.
+**Actual:** The system printed "GOODBYE, EVERYPONY!" and a manual check of `data/equipments.csv` confirmed that the newly created "Alicorn Amulet" was appended to the bottom of the file.
+**Result:** Pass
+
+## Test 30: Data Persistence - File Loading Sequence
+**Function Tested:** Phase 1 System Initialization (`FileStorageService.loadData`)
+**Input:** Relaunch the application after executing Test 29. Log in as a Player and search for the "Alicorn Amulet".
+**Expected:** The system detects the existing `.csv` files, bypasses the `DataInitializer` mock data generation entirely, and accurately loads the previous session's memory state.
+**Actual:** The console outputted "Data loaded successfully from CSV files!" and the `SearchService` successfully located the "Alicorn Amulet", proving the file I/O deserialization works.
+**Result:** Pass
+
+## Test 31: Tie-Breaker Logic for Player Leaderboards
+**Function Tested:** `RankingService.getPlayerLeaderboard()` Comparator Logic
+**Input:** Player Menu -> [7] View Leaderboards -> "How many players to show?": 10
+**Expected:** When multiple players share an identical `winRate` (e.g., 0.50), the system must utilize the secondary `level` metric as a tie-breaker, ranking higher-level players above lower-level ones.
+**Actual:** The system accurately sorted players like "Coco Pommel" (Level 30, 50% WR) above "Applejack" (Level 15, 50% WR) in the printed leaderboard array.
+**Result:** Pass
+
+## Test 32: Cascade Deletion for Equipped Items
+**Function Tested:** `GameDataManager.removeEquipment()` Cascade Protocol
+**Input:** Admin Menu -> Manage Equipment -> Remove Equipment -> "The Master Sword". Then, view the Hero Details for "Gerald".
+**Expected:** "The Master Sword" is deleted globally, and the backend safely iterates through all `Hero` objects to scrub the item from their `compatibleEquipments`, `recommendedEquipments`, and `currentEquipments` arrays.
+**Actual:** The equipment was successfully removed without triggering a `ConcurrentModificationException`, and it no longer appeared in Gerald's equipped items list.
+**Result:** Pass
+
+## Test 33: Player Self-Service Profile Persistence
+**Function Tested:** Player Interface & Shared Memory Mutation
+**Input:** Login as "Pinkie Pie" -> [2] Edit My Name -> New Name: "Commander Pinkie". Then go to [3] View Teams -> "Team Earth Pony".
+**Expected:** The `dataManager.updatePlayer()` method modifies the shared memory reference. The updated name should immediately reflect across all other modules, including the team roster lookup, without requiring a system reboot.
+**Actual:** The team roster lookup dynamically displayed "Commander Pinkie" because the underlying memory pointer was correctly mutated instead of overwritten.
+**Result:** Pass
+
+## Test 34: Admin Match Result Rollback Recalculation
+**Function Tested:** `GameDataManager.updateMatchRecord()` Mathematical Rollback
+**Input:** Admin Menu -> Manage Match Records -> Update Match Record -> Select a match where Team A won, and change the result to `TEAM_B_WIN`. 
+**Expected:** The backend mathematically subtracts the previous wins from Team A (and its players/equipment), and correctly credits those wins to Team B (and its players/equipment) while preserving the total match count.
+**Actual:** The system executed `removeMatchRecord()` to strip the old statistics and then recursively ran `addMatchRecord()` to distribute the new statistics perfectly.
+**Result:** Pass
+
+## Test 35: Global Match Record Limit Safety
+**Function Tested:** `ConsolePrinter.printRecentMatches()` Index Guard
+**Input:** Player Menu -> [5] View Global Match Records -> Prompt: "How many matches you would like to review?": 50 (when only 10 exist).
+**Expected:** The system prints all 10 available matches in reverse chronological order and safely terminates the loop without throwing an `IndexOutOfBoundsException`.
+**Actual:** The loop boundary condition `i >= 0 && count < n` successfully prevented the crash and displayed the entire available dataset.
+**Result:** Pass

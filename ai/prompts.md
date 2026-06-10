@@ -531,3 +531,22 @@ The AI evaluated `Main.java` and classified its findings into a critical executi
 
 ### My Decision
 Accepted the findings. I will add the missing switch breaks to resolve the menu fall-through bug, establish null-safety check parameters around search queries, integrate the player name saving lifecycle update, and eventually refactor the bloated admin menu into distinct helper methods to improve maintainability.
+
+
+## Prompt 24
+Time: 2026-06-10 11:38
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer
+Related Commit: 29d8748
+
+### My Prompt
+Act as an AI reviewer, please check if my code has met all the requirements, are there any bugs and are there any possible room for improvement.
+
+### AI Response Summary
+The AI delivered a comprehensive evaluation split into three core categories:
+1. **Requirements & Architecture (Excellent)**: Confirmed full adherence to coursework requirements, highlighting strong polymorphic inheritance (`Admin`/`Player` extending `Person`), rigorous thread safety via defensive array cloning, complex multi-layered CSV deserialization, and clean academic compliance in the `prompts.md` logs.
+2. **Bug Report (Edge Cases)**: Flagged three runtime edge cases in `Main.java`: an authentication lockout if a user is literally named "exit"; a lack of empty-string validation allowing admins to create nameless entities (e.g., `new Player("")`); and suboptimal performance routing using independent sequential `if` branches instead of a mutually exclusive `else if` structure.
+3. **Room for Improvement**: Identified a DRY (Don't Repeat Yourself) violation in `GameDataManager` featuring 40 lines of duplicated post-match mathematical calculations, noted a redundant database update execution path caused by Java's shallow-copy memory mutability, and recommended dynamically generating console options from the enum class using `Arrays.toString(HeroType.values())` to prevent hardcoded string smells.
+
+### My Decision
+[Insert Decision - e.g., Accepted the feedback. I will extract the duplicate match-tracking math into a helper method, fix the "exit" name collision safety gap, and transition to dynamic enum arrays to clean up the user interface text.]

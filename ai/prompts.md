@@ -550,3 +550,21 @@ The AI delivered a comprehensive evaluation split into three core categories:
 
 ### My Decision
 Accepted the feedback. I will extract the duplicate match-tracking math into a helper method, fix the "exit" name collision safety gap, and transition to dynamic enum arrays to clean up the user interface text.
+
+
+## Prompt 25
+Time: 2026-06-10 11:54 
+Tool/Model: Gemini Pro
+Agent Role: AI Reviewer and Implementation Agent
+Related Commit: 163d7c9
+
+### My Prompt
+I have found that the match record update methods are too clunky, and there is a hard code problem for hero type prompt in Main.java. Please improve the code according to my instructions.
+
+### AI Response Summary
+The AI resolved the clunky math operations and hardcoded presentation strings by refactoring the codebase for better maintainability:
+* **Consolidated Post-Match Statistics (`GameDataManager.java`)**: Extracted the highly duplicated statistics logic out of `addMatchRecord` and `removeMatchRecord`. It introduced a centralized private helper method, `updateTeamPostMatch(Team team, MatchRecord record, boolean isWinner, int matchDelta, int winDelta)`, creating a single source of truth for adjusting wins, total matches, and win rates across teams, players, and equipment. The core methods now cleanly pass a positive delta (+1) to compute new statistics or a negative delta (-1) to roll back old statistics.
+* **Dynamic Enum Formatting (`Main.java`)**: Refactored the manual, hardcoded string menu options inside `manageHeroes()` to dynamically fetch and output all current values directly from the `HeroType` enum.
+
+### My Decision
+Accepted. Centralizing the statistical tracking into a delta-driven helper method cleanly eliminates the clunky duplicate logic, establishes a single source of truth for match tracking, and removes the hardcoded string smell.

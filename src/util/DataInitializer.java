@@ -40,12 +40,12 @@ public class DataInitializer {
                 new Hero("Dante", HeroType.ELF, 2000, 22), 
                 new Hero("Nivus", HeroType.MAGE, 1500,28),
                 new Hero("Eridan", HeroType.ELF, 2400, 22), 
-                new Hero("Phoenix", HeroType.DRAGON, 1000, 15), 
-                new Hero("Wilbur", HeroType.DRAGON, 1500, 12),
+                new Hero("Phoenix", HeroType.DRAGON, 1000, 55), 
+                new Hero("Wilbur", HeroType.DRAGON, 3500, 30),
                 new Hero("Vez'nan", HeroType.MAGE, 1800, 24), 
                 new Hero("Asra", HeroType.ASSASSIN, 1400, 22), 
-                new Hero("Eiskalt", HeroType.DRAGON, 2000, 20),
-                new Hero("Boneheart", HeroType.DRAGON, 1500, 12), 
+                new Hero("Eiskalt", HeroType.DRAGON, 2800, 40),
+                new Hero("Boneheart", HeroType.DRAGON, 2600, 36), 
                 new Hero("Anya", HeroType.ELF, 2200, 20), 
                 new Hero("Nyru", HeroType.MAGE, 1300, 26)
             ));

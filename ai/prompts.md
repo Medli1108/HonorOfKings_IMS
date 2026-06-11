@@ -1,6 +1,8 @@
+# Prompts
+
 ## Prompt 01
 Time: 2026-06-04 07:44
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Architect Agent
 Related Commit: d056a49
 
@@ -16,7 +18,7 @@ Accepted all typo and grammar corrections. I applied these changes manually to t
 
 ## Prompt 02
 Time: 2026-06-04 08:05
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Implementation Agent
 Related Commit: 04889b3
 
@@ -32,7 +34,7 @@ Accepted the automated file rewrite. Verified that all seven structural correcti
 
 ## Prompt 03
 Time: 2026-06-05 01:40
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Architect Agent
 Related Commit: ae7699d
 
@@ -70,7 +72,7 @@ Accepted the framework modifications. The project structure was successfully upd
 
 ## Prompt 04
 Time: 2026-06-05 02:43
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Implementation Agent
 Related Commit: 9ae513b
 
@@ -95,7 +97,7 @@ I accepted the broad framework, but made a few manual tweaks to the dataset. I a
 
 ## Prompt 05
 Time: 2026-06-05 09:54
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Testing/Reviewer Agent
 Related Commit: 8045c03
 
@@ -156,7 +158,7 @@ After careful consideration, I accepted the proposed code review modifications. 
 
 ## Prompt 06
 Time: 2026-06-05 10:58
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Architect Agent
 Related Commit: 0c22a61
 
@@ -199,7 +201,7 @@ I accepted most of the structural blueprints, but I rejected the implementation 
 
 ## Prompt 07
 Time: 2026-06-06 01:33
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer and Implementation Agent
 Related Commit: dd4ccb7
 
@@ -220,7 +222,7 @@ Accepted the fixes for the logic errors, the new enums, and the implementation o
 
 ## Prompt 08
 Time: 2026-06-06 02:23
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Architect Agent
 Related Commit: 2b589c8
 
@@ -240,7 +242,7 @@ Rejected this draft. The proposed framework bundles too many responsibilities to
 
 ## Prompt 09
 Time: 2026-06-06 02:50
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Implementation Agent
 Related Commit: 76946e6
 
@@ -259,7 +261,7 @@ Accepted the changes. The separation of concerns between data storage and search
 
 ## Prompt 10
 Time: 2026-06-07 14:26
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Implementation Agent
 Related Commit: 3039ce0
 
@@ -275,7 +277,7 @@ Accepted the implementation. Because Java File I/O is a completely new topic for
 
 ## Prompt 11
 Time: 2026-06-08 13:51
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer
 Related Commit: 724cf64
 
@@ -294,7 +296,7 @@ Accepted all findings. I plan to follow the provided guidelines and step-by-step
 
 ## Prompt 12
 Time: 2026-06-08 16:10
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer and Implementation Agent
 Related Commit: 5d57076
 
@@ -312,7 +314,7 @@ Accepted the proposal. It makes sense to establish this underlying data architec
 
 ## Prompt 13
 Time: 2026-06-08 18:50
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer and Implementation Agent
 Related Commit: 7d2fe97
 
@@ -333,7 +335,7 @@ P.S. The first suggestion was actually wrong which I realized later and that cau
 
 ## Prompt 14
 Time: 2026-06-08 19:10
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer and Implementation Agent
 Related Commit: 25f2911
 
@@ -352,7 +354,7 @@ Accepted the changes to increase system robustness and prevent concurrent modifi
 
 ## Prompt 15
 Time: 2026-06-08 19:32
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer and Implementation Agent
 Related Commit: 6dd72ca
 
@@ -371,7 +373,7 @@ Accepted the changes. I will implement the recommended setter modifications and 
 
 ## Prompt 16
 Time: 2026-06-08 20:20
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer
 Related Commit: 793cf83
 
@@ -392,7 +394,7 @@ Accepted the changes. The AI executed the defensive copying architecture perfect
 
 ## Prompt 17
 Time: 2026-06-08 21:30
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer
 Related Commit: (Will be updated in the future)
 
@@ -414,7 +416,7 @@ Adopted the suggestions. The overall backend architecture is verified as product
 
  ## Prompt 18
 Time: 2026-06-09 01:47
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Implementation Agent
 Related Commit: 7b47954
 
@@ -434,7 +436,7 @@ Accepted these necessary modifications. Synchronizing the utility scripts and fi
 
 ## Prompt 19
 Time: 2026-06-09 02:54
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer and Implementation Agent
 Related Commit: 1b40bbc
 
@@ -452,7 +454,7 @@ Accepted and applied the changes. Mutating the fields on the existing object ref
 
 ## Prompt 20
 Time: 2026-06-09 03:22
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer and Implementation Agent
 Related Commit: b7067fb
 
@@ -473,7 +475,7 @@ Accepted these changes. I will implement the mathematical metric rollback, apply
 
 ## Prompt 21
 Time: 2026-06-09 10:27
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Architect
 Related Commit: 760baab
 
@@ -495,7 +497,7 @@ Accepted the framework. Isolating the menu routing logic and wrapping the system
 
 ## Prompt 22
 Time: 2026-06-09 18:20
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: Implementation Agent
 Related Commit: 4c9e53c
 
@@ -516,7 +518,7 @@ Accepted the changes. Moving the console-printing rendering out of the master ex
 
 ## Prompt 23
 Time: 2026-06-10 2:20
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer and Tester
 Related Commit: 876a343
 
@@ -535,7 +537,7 @@ Accepted the findings. I will add the missing switch breaks to resolve the menu 
 
 ## Prompt 24
 Time: 2026-06-10 11:38
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 3.1
 Agent Role: AI Reviewer
 Related Commit: 29d8748
 
@@ -554,7 +556,7 @@ Accepted the feedback. I will extract the duplicate match-tracking math into a h
 
 ## Prompt 25
 Time: 2026-06-10 11:54 
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 2.5 (I reached the daily rate limit, somehow unknowingly so I have to use Pro 2.5 instead)
 Agent Role: AI Reviewer and Implementation Agent
 Related Commit: 163d7c9
 
@@ -572,7 +574,7 @@ Accepted. Centralizing the statistical tracking into a delta-driven helper metho
 
 ## Prompt 26
 Time: 2026-06-10 14:39
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 2.5
 Agent Role: AI Tester and Implementation Agent
 Related Commit: 0594a27, e73e9ef
 
@@ -589,7 +591,7 @@ Accepted the fixes after performing independent manual verification. Utilizing a
 
 ## Prompt 27
 Time: 2026-06-10 16:15
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 2.5
 Agent Role: Implementation Agent
 Related Commit: e656cad
 
@@ -626,7 +628,7 @@ Manually applied these changes. Hand-coding the generated service and menu files
 
 ## Prompt 28
 Time: 2026-06-10 19:50
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 2.5
 Agent Role: AI Architect
 Related Commit: db549e7
 
@@ -645,7 +647,7 @@ Rejected the JavaFX framework proposal. Because I am unfamiliar with JavaFX, I d
 
 ## Prompt 29
 Time: 2026-06-10 20:15
-Tool/Model: Gemini Pro
+Tool/Model: Gemini/Pro 2.5
 Agent Role: AI Architect
 Related Commit: 6429d75
 

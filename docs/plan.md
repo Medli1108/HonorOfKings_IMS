@@ -131,4 +131,4 @@ I will perform manual testing documented in "test-cases.md", ensuring at least 1
 
 ## 12. Final Reflection Placeholder
 This just serves as a reminder for a reflection.
-P.S. After completing the main tasks, I might consider adding some extra features (GUIs, more interesting and helpful classes, amazing new features like  a combat system, etc.).
+P.S. After completing the main tasks, I might consider adding some extra features (GUIs, more interesting and helpful classes, amazing new features like a combat system, etc.).

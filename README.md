@@ -9,7 +9,7 @@ The project provides two execution modes: a traditional console-based interface 
 1. **Compile the project:** Ensure you have the Java Development Kit (JDK) installed. Compile all `.java` files inside the `src/` directory.
 2. **Run the Console Version:** Execute `Main.java` to start the terminal-based menu loop.
 3. **Run the GUI Version:** Execute `Main_With_GUI.java` to launch the desktop application shell.
-4. **Data Initialization:** Upon the first launch, if no saved data is found, the system will automatically generate a mock dataset and save the records to CSV files in the `data/` directory. Subsequent launches will dynamically load from these files.
+4. **Data Initialization:** Upon the first launch, if no saved data is found, the system will automatically generate a mock dataset and save the records to CSV files in the `data/` directory (invisible on GitHub since it is empty). Subsequent launches will dynamically load from these files.
 
 ## 3. Default Login Accounts
 The system utilizes a mock dataset initialized with distinct character names. You can log in by typing any of the following names when prompted:
